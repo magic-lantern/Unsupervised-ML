@@ -42,6 +42,13 @@ def inpatient_encoded(inpatient_ml_dataset):
     
 
 @transform_pandas(
+    Output(rid="ri.foundry.main.dataset.74e48f2e-6947-443e-ac1f-369a5575851e"),
+    inpatient_encoded=Input(rid="ri.foundry.main.dataset.cef3c32e-767c-4f6a-b669-3920dac46a10")
+)
+def inpatient_encoded_spark(inpatient_encoded):
+    return spark.createDataFrame(inpatient_encoded)
+
+@transform_pandas(
     Output(rid="ri.vector.main.execute.3d0af307-7bdc-4186-bfd0-ebea8e3d3309"),
     inpatient_encoded=Input(rid="ri.foundry.main.dataset.cef3c32e-767c-4f6a-b669-3920dac46a10")
 )
@@ -57,11 +64,4 @@ def scale_test(inpatient_encoded):
     #start with all variables for PCA
     my_pca = PCA(n_components=scaled_df.shape[1], random_state=42)
     my_pca.fit(scaled_df)
-
-@transform_pandas(
-    Output(rid="ri.vector.main.execute.55afaffa-e4f6-4ba8-be04-3fa621fef160"),
-    inpatient_encoded=Input(rid="ri.foundry.main.dataset.cef3c32e-767c-4f6a-b669-3920dac46a10")
-)
-def unnamed(inpatient_encoded):
-    
 
