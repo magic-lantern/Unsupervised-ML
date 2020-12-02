@@ -29,11 +29,11 @@ def inpatient_encoded(inpatient_ml_dataset):
     df = df.drop(columns=['bad_outcome', 'visit_start_date', 'visit_end_date'])
     
     df = pd.concat([df.drop('gender_concept_name', axis=1), pd.get_dummies(df.gender_concept_name, prefix='gender')], axis=1)
-    df = pd.concat([df.drop('race', axis=1), pd.get_dummies(df.race, prefix='race')], axis=1)
-    df = pd.concat([df.drop('ethnicity', axis=1), pd.get_dummies(df.ethnicity, prefix='ethnicity')], axis=1)
-    df = pd.concat([df.drop('smoking_status', axis=1), pd.get_dummies(df.smoking_status, prefix='smoking')], axis=1)
-    df = pd.concat([df.drop('blood_type', axis=1), pd.get_dummies(df.blood_type, prefix='blood_type')], axis=1)
-    df = pd.concat([df.drop('severity_type', axis=1), pd.get_dummies(df.severity_type, prefix='severity')], axis=1)
+    df = pd.concat([df.drop('race', axis=1), pd.get_dummies(df.race, prefix='race', drop_first=True)], axis=1)
+    df = pd.concat([df.drop('ethnicity', axis=1), pd.get_dummies(df.ethnicity, prefix='ethnicity', drop_first=True)], axis=1)
+    df = pd.concat([df.drop('smoking_status', axis=1), pd.get_dummies(df.smoking_status, prefix='smoking', drop_first=True)], axis=1)
+    df = pd.concat([df.drop('blood_type', axis=1), pd.get_dummies(df.blood_type, prefix='blood_type', drop_first=True)], axis=1)
+    df = pd.concat([df.drop('severity_type', axis=1), pd.get_dummies(df.severity_type, prefix='severity', drop_first=True)], axis=1)
 
     df.columns = df.columns.str.replace(' ', '_')
     df.columns = df.columns.str.replace('/', '_')
@@ -42,5 +42,12 @@ def inpatient_encoded(inpatient_ml_dataset):
     #scaler = preprocessing.StandardScaler()
     #scaler.fit(df)
     return df
+    
+
+@transform_pandas(
+    Output(rid="ri.vector.main.execute.3d0af307-7bdc-4186-bfd0-ebea8e3d3309"),
+    inpatient_encoded=Input(rid="ri.foundry.main.dataset.cef3c32e-767c-4f6a-b669-3920dac46a10")
+)
+def unnamed(inpatient_encoded):
     
 
