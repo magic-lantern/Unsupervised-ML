@@ -41,5 +41,6 @@ def inpatient_encoded(inpatient_ml_dataset):
 
     #scaler = preprocessing.StandardScaler()
     #scaler.fit(df)
+    return df
     
 
