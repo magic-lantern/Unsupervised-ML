@@ -48,8 +48,20 @@ def inpatient_encoded(inpatient_ml_dataset):
 def scale_test(inpatient_encoded):
     df = inpatient_encoded
     prediction = df.bad_outcome
+    # take out prediction column
     df = df.drop(columns='bad_outcome')
     scaler = preprocessing.StandardScaler()
     scaler.fit(df)
     scaled_df = scaler.transform(df)
+
+    #start with all variables for PCA
+    my_pca = PCA(n_components=scaled_df.shape[1], random_state=42)
+    my_pca.fit(scaled_df)
+
+@transform_pandas(
+    Output(rid="ri.vector.main.execute.55afaffa-e4f6-4ba8-be04-3fa621fef160"),
+    inpatient_encoded=Input(rid="ri.foundry.main.dataset.cef3c32e-767c-4f6a-b669-3920dac46a10")
+)
+def unnamed(inpatient_encoded):
+    
 
