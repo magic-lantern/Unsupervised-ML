@@ -46,8 +46,10 @@ def inpatient_encoded(inpatient_ml_dataset):
     inpatient_encoded=Input(rid="ri.foundry.main.dataset.cef3c32e-767c-4f6a-b669-3920dac46a10")
 )
 def scale_test(inpatient_encoded):
-        df = inpatient_encoded.toPandas()
-    
-        scaler = preprocessing.StandardScaler()
-        scaler.fit(df)
+    df = inpatient_encoded
+    prediction = df.bad_outcome
+    df = df.drop(columns='bad_outcome')
+    scaler = preprocessing.StandardScaler()
+    scaler.fit(df)
+    scaled_df = scaler.transform(df)
 
