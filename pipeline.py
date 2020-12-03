@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+from mpl_toolkits import mplot3d
 import seaborn as sns
 from sklearn.decomposition import PCA, IncrementalPCA
 from sklearn import preprocessing
@@ -77,10 +78,31 @@ def pca_analysis(inpatient_encoded):
     #start with all variables for PCA
     my_pca = PCA(n_components=scaled_df.shape[1], random_state=42)
     my_pca.fit(scaled_df)
-    pca_df = my_pca.transform(scaled_df)
+    pca_arr = my_pca.transform(scaled_df)
 
     plt.plot(np.cumsum(my_pca.explained_variance_ratio_))
     plt.xlabel('Number of components')
     plt.ylabel('Explained variance')
+    plt.show()
+
+    # now the top 3
+    pca_3 = PCA(n_components=3, random_state=42)
+    pca_3.fit(scaled_df)
+    pca_3_arr = pca_3.transform(scaled_df)
+
+    fig = plt.figure(figsize = (12, 8))
+    ax = plt.axes(projection="3d")
+
+    splt = ax.scatter3D(
+        pca_3_arr[:, 0],
+        pca_3_arr[:, 1],
+        pca_3_arr[:, 2],
+        c = prediction,
+        s=50,
+        alpha=0.6)
+
+    ax.set_xlabel('First principal component')
+    ax.set_ylabel('Second principal component')
+    ax.set_zlabel('Third principal component')
     plt.show()
 
