@@ -256,7 +256,7 @@ def pca_3_dataset(inpatient_encoded):
     pca_3.fit(scaled_df)
     pca_3_arr = pca_3.transform(scaled_df)
 
-    return pca_3_arr
+    return pd.DataFrame(pca_3_arr)
 
 @transform_pandas(
     Output(rid="ri.vector.main.execute.17ab7d1e-d4f3-4a5f-98a7-f63f5997c021"),
@@ -289,6 +289,24 @@ def pca_explained_variance(inpatient_encoded):
     Output(rid="ri.vector.main.execute.727dca65-eb02-41a3-b741-343d7b848573"),
     inpatient_encoded=Input(rid="ri.foundry.main.dataset.cef3c32e-767c-4f6a-b669-3920dac46a10")
 )
-def unnamed(inpatient_encoded):
-    
+def umap_analysis(inpatient_encoded):
+  from sklearn.preprocessing import StandardScaler
+  # Dimension reduction and clustering libraries
+  import umap
+  #import hdbscan
+  import sklearn.cluster as cluster
+  from sklearn.metrics import adjusted_rand_score, adjusted_mutual_info_score
+  df = unique_unit_vs_measurement_concept.toPandas()
+  reducer = umap.UMAP()
+  # format data for UMAP input
+  measurements_data = df.values
+  scaled_measurements_data = StandardScaler().fit_transform(measurements_data)
+  embedding = reducer.fit_transform(scaled_measurements_data)
+  print(embedding.shape)
+  plt.scatter(embedding[:, 0],embedding[:, 1])
+  plt.gca().set_aspect(‘equal’, ‘datalim’)
+  plt.title(‘measurement concept UMAP projection’, fontsize=20)
+  plt.show()
+  return
+
 
