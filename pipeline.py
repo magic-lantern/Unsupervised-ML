@@ -75,6 +75,19 @@ def inpatient_encoded_spark(inpatient_encoded):
     return spark.createDataFrame(inpatient_encoded)
 
 @transform_pandas(
+    Output(rid="ri.foundry.main.dataset.f410db35-59e0-4b82-8fa8-d6dc6a61c9f2"),
+    inpatient_encoded=Input(rid="ri.foundry.main.dataset.cef3c32e-767c-4f6a-b669-3920dac46a10")
+)
+def inpatient_w_imputation(inpatient_encoded):
+    df = inpatient_encoded
+    
+    # this is bad, but just fill all nulls with median
+    filled_df = df.fillna(df.median())
+
+    return filled_df
+    
+
+@transform_pandas(
     Output(rid="ri.foundry.main.dataset.05f810fb-9481-4a6c-9ef1-ea81d5d93476"),
     inpatient_encoded=Input(rid="ri.foundry.main.dataset.cef3c32e-767c-4f6a-b669-3920dac46a10")
 )
@@ -307,11 +320,4 @@ plt.title(‘measurement concept UMAP projection’, fontsize=20)
 plt.show()
 return
 
-
-@transform_pandas(
-    Output(rid="ri.vector.main.execute.e90db4f9-2d92-4cd6-a25a-2a0d539131f8"),
-    inpatient_encoded=Input(rid="ri.foundry.main.dataset.cef3c32e-767c-4f6a-b669-3920dac46a10")
-)
-def unnamed(inpatient_encoded):
-    
 
