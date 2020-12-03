@@ -56,34 +56,31 @@ def inpatient_encoded_spark(inpatient_encoded):
     return spark.createDataFrame(inpatient_encoded)
 
 @transform_pandas(
-    Output(rid="ri.vector.main.execute.3d0af307-7bdc-4186-bfd0-ebea8e3d3309"),
+    Output(rid="ri.foundry.main.dataset.a230c6e9-ece6-46e0-89aa-c9414533899f"),
     inpatient_encoded=Input(rid="ri.foundry.main.dataset.cef3c32e-767c-4f6a-b669-3920dac46a10")
 )
-def pca_analysis(inpatient_encoded):
-    df = inpatient_encoded
-    prediction = df.bad_outcome
-    # take out prediction column
-    df = df.drop(columns='bad_outcome')
-    scaler = preprocessing.StandardScaler()
+def pca_3_comp_analysis(inpatient_encoded):
+df = inpatient_encoded
+prediction = df.bad_outcome
+# take out prediction column
+df = df.drop(columns='bad_outcome')
+scaler = preprocessing.StandardScaler()
 
-    # smaller dataframe with just a few columns for testing purposes
-    # sdf = df[['data_partner_id', 'age_at_visit_start_in_years_int', 'length_of_stay', 'q_score', 'testcount', 'positive_covid_test', 'negative_covid_test', 'suspected_covid', 'in_death_table', 'ecmo', 'aki_in_hospital', 'invasive_ventilation']]
+# smaller dataframe with just a few columns for testing purposes
+# sdf = df[['data_partner_id', 'age_at_visit_start_in_years_int', 'length_of_stay', 'q_score', 'testcount', 'positive_covid_test', 'negative_covid_test', 'suspected_covid', 'in_death_table', 'ecmo', 'aki_in_hospital', 'invasive_ventilation']]
 
-    # this is bad, but just fill all nulls with mean
-    filled_df = df.fillna(df.mean())
+# this is bad, but just fill all nulls with mean
+filled_df = df.fillna(df.mean())
 
-    scaler.fit(filled_df)
-    scaled_df = scaler.transform(filled_df)
+scaler.fit(filled_df)
+scaled_df = scaler.transform(filled_df)
 
-    #start with all variables for PCA
-    my_pca = PCA(n_components=scaled_df.shape[1], random_state=42)
-    my_pca.fit(scaled_df)
-    pca_arr = my_pca.transform(scaled_df)
+#start with all variables for PCA
+my_pca = PCA(n_components=scaled_df.shape[1], random_state=42)
+my_pca.fit(scaled_df)
+pca_arr = my_pca.transform(scaled_df)
 
-    plt.plot(np.cumsum(my_pca.explained_variance_ratio_))
-    plt.xlabel('Number of components')
-    plt.ylabel('Explained variance')
-    plt.show()
+    np.cumsum(my_pca.explained_variance_ratio_ * 100)[2]
 
     # now the top 3 viewed with outcome
     pca_3 = PCA(n_components=3, random_state=42)
@@ -101,12 +98,13 @@ def pca_analysis(inpatient_encoded):
         s=50,
         alpha=0.6)
 
-    legend1 = ax.legend(*splt.legend_elements(), title="bad_outcome")
+    legend1 = ax.legend(*splt.legend_elements(), title='bad_outcome')
     ax.add_artist(legend1)
 
     ax.set_xlabel('First principal component')
     ax.set_ylabel('Second principal component')
     ax.set_zlabel('Third principal component')
+    plt.title('PCA 3D scatter plot - ', round(np.cumsum(my_pca.explained_variance_ratio_ * 100)[2]), '% of variance captured', sep='')
     plt.show()
 
     # see https://stackoverflow.com/questions/22984335/recovering-features-names-of-explained-variance-ratio-in-pca-with-sklearn
