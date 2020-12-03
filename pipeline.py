@@ -138,43 +138,40 @@ def pca_explained_variance(inpatient_encoded):
     plt.show()
 
 @transform_pandas(
-    Output(rid="ri.vector.main.execute.1a222f7d-5961-495e-8e27-b6e4063ee7c7"),
+    Output(rid="ri.foundry.main.dataset.e6967b18-d64f-4539-9a9f-7ae3a5eef700"),
     inpatient_encoded=Input(rid="ri.foundry.main.dataset.cef3c32e-767c-4f6a-b669-3920dac46a10")
 )
 def pca_ranked_features(inpatient_encoded):
-    #
-    # based on https://stackoverflow.com/a/56722874
-    #
-df = inpatient_encoded
-prediction = df.bad_outcome
-# take out prediction column
-df = df.drop(columns='bad_outcome')
-scaler = preprocessing.StandardScaler()
+    df = inpatient_encoded
+    prediction = df.bad_outcome
+    # take out prediction column
+    df = df.drop(columns='bad_outcome')
+    scaler = preprocessing.StandardScaler()
 
-# this is bad, but just fill all nulls with mean
-filled_df = df.fillna(df.mean())
+    # this is bad, but just fill all nulls with mean
+    filled_df = df.fillna(df.mean())
 
-scaler.fit(filled_df)
-scaled_df = scaler.transform(filled_df)
+    scaler.fit(filled_df)
+    scaled_df = scaler.transform(filled_df)
 
-# now the top 3 viewed with outcome
-pca_3 = PCA(n_components=3, random_state=42)
-pca_3.fit(scaled_df)
-pca_3_arr = pca_3.transform(scaled_df)
+    # now the top 3 viewed with outcome
+    pca_3 = PCA(n_components=3, random_state=42)
+    pca_3.fit(scaled_df)
+    pca_3_arr = pca_3.transform(scaled_df)
 
-# number of components
-n_pcs = pca_3.components_.shape[0]
+    pca_df = pd.DataFrame(pca_3.components_, columns=filled_df.columns,index = ['PC-1','PC-2', 'PC-3'])
+    pt = pca_df.transpose().abs()
+    pc1_df = pt.sort_values('PC-1', ascending=False).drop(['PC-2', 'PC-3'], axis=1)
+    pc1_df = pc1_df.reset_index()
+    pc1_df = pc1_df.rename(columns = {'index':'pc-1-col', 'PC-1': 'pc-1-val'})
 
-# get the index of the most important feature on EACH component i.e. largest absolute value
-most_important = [np.abs(pca_3.components_[i]).argmax() for i in range(n_pcs)]
+    pc2_df = pt.sort_values('PC-2', ascending=False).drop(['PC-1', 'PC-3'], axis=1)
+    pc2_df = pc2_df.reset_index()
+    pc2_df = pc2_df.rename(columns = {'index':'pc-2-col', 'PC-2': 'pc-2-val'})
 
-initial_feature_names = df.columns
+    pc3_df = pt.sort_values('PC-3', ascending=False).drop(['PC-1', 'PC-2'], axis=1)
+    pc3_df = pc3_df.reset_index()
+    pc3_df = pc3_df.rename(columns = {'index':'pc-3-col', 'PC-3': 'pc-3-val'})
 
-# get the names
-most_important_names = [initial_feature_names[most_important[i]] for i in range(n_pcs)]
-
-dic = {'PC{}'.format(i+1): most_important_names[i] for i in range(n_pcs)}
-
-# build the dataframe
-df_feat = pd.DataFrame(sorted(dic.items()))
+    return spark.createDataFrame(pd.concat([pc1_df, pc2_df, pc3_df], axis=1))
 
