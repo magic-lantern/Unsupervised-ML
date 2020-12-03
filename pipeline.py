@@ -333,3 +333,10 @@ plt.show()
 return
 
 
+@transform_pandas(
+    Output(rid="ri.vector.main.execute.ddf9fe9f-f93d-4762-827e-3cf99e04d025"),
+    inpatient_scaled_w_imputation=Input(rid="ri.foundry.main.dataset.f410db35-59e0-4b82-8fa8-d6dc6a61c9f2")
+)
+def unnamed(inpatient_scaled_w_imputation):
+    
+
