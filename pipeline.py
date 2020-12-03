@@ -53,7 +53,7 @@ def inpatient_encoded(inpatient_ml_dataset):
     df = pd.concat([df.drop('ethnicity', axis=1), pd.get_dummies(df.ethnicity, prefix='ethnicity', drop_first=True)], axis=1)
     df = pd.concat([df.drop('smoking_status', axis=1), pd.get_dummies(df.smoking_status, prefix='smoking', drop_first=True)], axis=1)
     df = pd.concat([df.drop('blood_type', axis=1), pd.get_dummies(df.blood_type, prefix='blood_type', drop_first=True)], axis=1)
-    df = pd.concat([df.drop('severity_type', axis=1), pd.get_dummies(df.severity_type, prefix='severity', drop_first=True)], axis=1)
+    #df = pd.concat([df.drop('severity_type', axis=1), pd.get_dummies(df.severity_type, prefix='severity', drop_first=True)], axis=1)
 
     df.columns = df.columns.str.replace(' ', '_')
     df.columns = df.columns.str.replace('/', '_')
@@ -98,8 +98,8 @@ def pca_3_comp_analysis(inpatient_encoded):
     # smaller dataframe with just a few columns for testing purposes
     # sdf = df[['data_partner_id', 'age_at_visit_start_in_years_int', 'length_of_stay', 'q_score', 'testcount', 'positive_covid_test', 'negative_covid_test', 'suspected_covid', 'in_death_table', 'ecmo', 'aki_in_hospital', 'invasive_ventilation']]
 
-    # this is bad, but just fill all nulls with mean
-    filled_df = df.fillna(df.mean())
+    # this is bad, but just fill all nulls with median
+    filled_df = df.fillna(df.median())
 
     scaler.fit(filled_df)
     scaled_df = scaler.transform(filled_df)
@@ -149,8 +149,8 @@ def pca_explained_variance(inpatient_encoded):
     df = df.drop(columns='bad_outcome')
     scaler = preprocessing.StandardScaler()
 
-    # this is bad, but just fill all nulls with mean
-    filled_df = df.fillna(df.mean())
+    # this is bad, but just fill all nulls with median
+    filled_df = df.fillna(df.median())
 
     scaler.fit(filled_df)
     scaled_df = scaler.transform(filled_df)
@@ -176,8 +176,8 @@ def pca_ranked_features(inpatient_encoded):
     df = df.drop(columns='bad_outcome')
     scaler = preprocessing.StandardScaler()
 
-    # this is bad, but just fill all nulls with mean
-    filled_df = df.fillna(df.mean())
+    # this is bad, but just fill all nulls with median
+    filled_df = df.fillna(df.median())
 
     scaler.fit(filled_df)
     scaled_df = scaler.transform(filled_df)
