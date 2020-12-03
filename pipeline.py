@@ -19,6 +19,7 @@ from pyspark.sql.functions import max, mean, min, stddev, lit, regexp_replace, c
     inpatient_encoded=Input(rid="ri.foundry.main.dataset.cef3c32e-767c-4f6a-b669-3920dac46a10")
 )
 def data_by_site(inpatient_encoded):
+    df = inpatient_encoded
     sites_with_values = df.groupby('data_partner_id').count()
     return sites_with_values.reset_index()
 
