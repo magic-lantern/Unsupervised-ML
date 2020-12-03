@@ -28,13 +28,18 @@ def data_by_site(inpatient_encoded):
     inpatient_ml_dataset=Input(rid="ri.foundry.main.dataset.07927bca-b175-4775-9c55-a371af481cc1")
 )
 def inpatient_encoded(inpatient_ml_dataset):
-    # get rid of ids and a few other columns that are duplicates of other information
+    # get rid of ids, columns that are duplicates of other information,
+    # or columns that are from the end of stay
     sdf = inpatient_ml_dataset
     sdf = sdf.drop('covid_status_name')
     sdf = sdf.drop('person_id')
     sdf = sdf.drop('visit_concept_id')
     sdf = sdf.drop('visit_concept_name')
     sdf = sdf.drop('visit_occurrence_id')
+    sdf = sdf.drop('in_death_table')
+    sdf = sdf.drop('severity_type')
+    sdf = sdf.drop('length_of_stay')
+    sdf = sdf.drop('covid_status_name')
 
     df = sdf.toPandas()
 
