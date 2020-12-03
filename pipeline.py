@@ -19,6 +19,14 @@ import umap
 #pd.set_option('display.max_colwidth', -1)
 #np.set_printoptions(threshold=np.inf)
 
+def get_scaled():
+    scaler = StandardScaler()
+    df = inpatient_w_imputation
+    df = df.drop(columns='bad_outcome')
+
+    scaler.fit(df)
+    return scaler.transform(df)
+
 @transform_pandas(
     Output(rid="ri.foundry.main.dataset.64abd514-65b6-42f8-8075-0e63f23fcd0d"),
     inpatient_encoded=Input(rid="ri.foundry.main.dataset.cef3c32e-767c-4f6a-b669-3920dac46a10")
@@ -78,13 +86,17 @@ def inpatient_encoded_spark(inpatient_encoded):
     Output(rid="ri.foundry.main.dataset.f410db35-59e0-4b82-8fa8-d6dc6a61c9f2"),
     inpatient_encoded=Input(rid="ri.foundry.main.dataset.cef3c32e-767c-4f6a-b669-3920dac46a10")
 )
-def inpatient_w_imputation(inpatient_encoded):
+def inpatient_scaled_w_imputation(inpatient_encoded):
     df = inpatient_encoded
     
     # this is bad, but just fill all nulls with median
+    # try mo'bettah imputation later
     filled_df = df.fillna(df.median())
 
-    return filled_df
+    scaler = StandardScaler()
+    scaler.fit(filled_df)
+
+    return pd.DataFrame(scaler.transform(filled_df), columns=filled_df.columns)
     
 
 @transform_pandas(
