@@ -173,7 +173,7 @@ def pca_ranked_features(inpatient_encoded):
     pc3_df = pc3_df.reset_index()
     pc3_df = pc3_df.rename(columns = {'index':'pc-3-col', 'PC-3': 'pc-3-val'})
 
-    return spark.createDataFrame(pd.concat([pc1_df, pc2_df, pc3_df], axis=1)).sort(col('pc-1-val').desc())
+    return spark.createDataFrame(pd.concat([pc1_df, pc2_df, pc3_df], axis=1)).sort(col('pc-1-val').asc())
 
 @transform_pandas(
     Output(rid="ri.vector.main.execute.2ac8a8fd-c395-4c49-84fe-3404d8ede65d"),
