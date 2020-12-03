@@ -84,6 +84,92 @@ def missing_data_info(inpatient_encoded):
     return missing_df
 
 @transform_pandas(
+    Output(rid="ri.foundry.main.dataset.e6967b18-d64f-4539-9a9f-7ae3a5eef700"),
+    inpatient_encoded=Input(rid="ri.foundry.main.dataset.cef3c32e-767c-4f6a-b669-3920dac46a10")
+)
+def pca3_ranked_features(inpatient_encoded):
+    df = inpatient_encoded
+    prediction = df.bad_outcome
+    # take out prediction column
+    df = df.drop(columns='bad_outcome')
+    scaler = preprocessing.StandardScaler()
+
+    # this is bad, but just fill all nulls with median
+    filled_df = df.fillna(df.median())
+
+    scaler.fit(filled_df)
+    scaled_df = scaler.transform(filled_df)
+
+    # now the top 3 viewed with outcome
+    pca_3 = PCA(n_components=3, random_state=42)
+    pca_3.fit(scaled_df)
+    pca_3_arr = pca_3.transform(scaled_df)
+
+    pca_df = pd.DataFrame(pca_3.components_, columns=filled_df.columns,index = ['PC-1','PC-2', 'PC-3'])
+    pt = pca_df.transpose().abs()
+    pc1_df = pt.sort_values('PC-1', ascending=False).drop(['PC-2', 'PC-3'], axis=1)
+    pc1_df = pc1_df.reset_index()
+    pc1_df = pc1_df.rename(columns = {'index':'pc-1-col', 'PC-1': 'pc-1-val'})
+
+    pc2_df = pt.sort_values('PC-2', ascending=False).drop(['PC-1', 'PC-3'], axis=1)
+    pc2_df = pc2_df.reset_index()
+    pc2_df = pc2_df.rename(columns = {'index':'pc-2-col', 'PC-2': 'pc-2-val'})
+
+    pc3_df = pt.sort_values('PC-3', ascending=False).drop(['PC-1', 'PC-2'], axis=1)
+    pc3_df = pc3_df.reset_index()
+    pc3_df = pc3_df.rename(columns = {'index':'pc-3-col', 'PC-3': 'pc-3-val'})
+
+    sdf = spark.createDataFrame(pd.concat([pc1_df, pc2_df, pc3_df], axis=1))
+    sdf = sdf.sort(col('pc-1-val').desc())
+
+    return sdf
+
+@transform_pandas(
+    Output(rid="ri.foundry.main.dataset.e60a9fc6-c946-4707-a1a0-bea11453ad48"),
+    inpatient_encoded=Input(rid="ri.foundry.main.dataset.cef3c32e-767c-4f6a-b669-3920dac46a10")
+)
+def pca_2_comp_analysis(inpatient_encoded):
+    # decent PCA guide available here: https://towardsdatascience.com/principal-component-analysis-pca-with-scikit-learn-1e84a0c731b0
+    df = inpatient_encoded
+    prediction = df.bad_outcome
+    # take out prediction column
+    df = df.drop(columns='bad_outcome')
+    scaler = preprocessing.StandardScaler()
+
+    # this is bad, but just fill all nulls with median
+    filled_df = df.fillna(df.median())
+
+    scaler.fit(filled_df)
+    scaled_arr = scaler.transform(filled_df)
+
+    #start with all variables for PCA
+    my_pca = PCA(n_components=scaled_arr.shape[1], random_state=42)
+    my_pca.fit(scaled_arr)
+    pca_arr = my_pca.transform(scaled_arr)
+
+    # now the top 3 viewed with outcome
+    pca_2 = PCA(n_components=2, random_state=42)
+    pca_2.fit(scaled_arr)
+    pca_2_arr = pca_2.transform(scaled_arr)
+
+    fig = plt.figure(figsize = (12, 8))
+
+    splt = sns.scatterplot(x = pca_2_arr[:, 0],
+                            y = pca_2_arr[:, 1],
+                            s = 100,
+                            hue = prediction,
+                            alpha = 0.6)
+
+    plt.xlabel('First principal component')
+    plt.ylabel('Second principal component')
+    mytitle = 'PCA 2D scatter plot - ' + str(round(np.cumsum(my_pca.explained_variance_ratio_ * 100)[1])) + '% of variance captured'
+    plt.title(mytitle)
+    plt.show()
+
+    # see https://stackoverflow.com/questions/22984335/recovering-features-names-of-explained-variance-ratio-in-pca-with-sklearn
+    return spark.createDataFrame(pd.DataFrame(pca_2.components_, columns=filled_df.columns,index = ['PC-1','PC-2']).reset_index())
+
+@transform_pandas(
     Output(rid="ri.foundry.main.dataset.a230c6e9-ece6-46e0-89aa-c9414533899f"),
     inpatient_encoded=Input(rid="ri.foundry.main.dataset.cef3c32e-767c-4f6a-b669-3920dac46a10")
 )
@@ -164,52 +250,4 @@ def pca_explained_variance(inpatient_encoded):
     plt.xlabel('Number of components')
     plt.ylabel('Explained variance')
     plt.show()
-
-@transform_pandas(
-    Output(rid="ri.foundry.main.dataset.e6967b18-d64f-4539-9a9f-7ae3a5eef700"),
-    inpatient_encoded=Input(rid="ri.foundry.main.dataset.cef3c32e-767c-4f6a-b669-3920dac46a10")
-)
-def pca_ranked_features(inpatient_encoded):
-    df = inpatient_encoded
-    prediction = df.bad_outcome
-    # take out prediction column
-    df = df.drop(columns='bad_outcome')
-    scaler = preprocessing.StandardScaler()
-
-    # this is bad, but just fill all nulls with median
-    filled_df = df.fillna(df.median())
-
-    scaler.fit(filled_df)
-    scaled_df = scaler.transform(filled_df)
-
-    # now the top 3 viewed with outcome
-    pca_3 = PCA(n_components=3, random_state=42)
-    pca_3.fit(scaled_df)
-    pca_3_arr = pca_3.transform(scaled_df)
-
-    pca_df = pd.DataFrame(pca_3.components_, columns=filled_df.columns,index = ['PC-1','PC-2', 'PC-3'])
-    pt = pca_df.transpose().abs()
-    pc1_df = pt.sort_values('PC-1', ascending=False).drop(['PC-2', 'PC-3'], axis=1)
-    pc1_df = pc1_df.reset_index()
-    pc1_df = pc1_df.rename(columns = {'index':'pc-1-col', 'PC-1': 'pc-1-val'})
-
-    pc2_df = pt.sort_values('PC-2', ascending=False).drop(['PC-1', 'PC-3'], axis=1)
-    pc2_df = pc2_df.reset_index()
-    pc2_df = pc2_df.rename(columns = {'index':'pc-2-col', 'PC-2': 'pc-2-val'})
-
-    pc3_df = pt.sort_values('PC-3', ascending=False).drop(['PC-1', 'PC-2'], axis=1)
-    pc3_df = pc3_df.reset_index()
-    pc3_df = pc3_df.rename(columns = {'index':'pc-3-col', 'PC-3': 'pc-3-val'})
-
-    sdf = spark.createDataFrame(pd.concat([pc1_df, pc2_df, pc3_df], axis=1))
-    sdf = sdf.sort(col('pc-1-val').desc())
-
-    return sdf
-
-@transform_pandas(
-    Output(rid="ri.vector.main.execute.6f09f6d3-cd09-4aa6-8760-b610f5f3cd2d"),
-    inpatient_encoded=Input(rid="ri.foundry.main.dataset.cef3c32e-767c-4f6a-b669-3920dac46a10")
-)
-def unnamed(inpatient_encoded):
-    
 
