@@ -64,7 +64,9 @@ def missing_data_info(inpatient_encoded):
     missing_df = df.isnull().sum().to_frame()
     missing_df = missing_df.rename(columns = {0:'null_count'})
     missing_df['pct_missing'] = missing_df['null_count'] / df.shape[0]
-    missing_df.sort_values('pct_missing', ascending=False)
+    missing_df = missing_df.reset_index()
+    missing_df = missing_df.rename(columns = {'index':'variable'})
+    missing_df = missing_df.sort_values('pct_missing', ascending=False)
     return missing_df
 
 @transform_pandas(
