@@ -60,25 +60,25 @@ def inpatient_encoded_spark(inpatient_encoded):
     inpatient_encoded=Input(rid="ri.foundry.main.dataset.cef3c32e-767c-4f6a-b669-3920dac46a10")
 )
 def pca_3_comp_analysis(inpatient_encoded):
-df = inpatient_encoded
-prediction = df.bad_outcome
-# take out prediction column
-df = df.drop(columns='bad_outcome')
-scaler = preprocessing.StandardScaler()
+    df = inpatient_encoded
+    prediction = df.bad_outcome
+    # take out prediction column
+    df = df.drop(columns='bad_outcome')
+    scaler = preprocessing.StandardScaler()
 
-# smaller dataframe with just a few columns for testing purposes
-# sdf = df[['data_partner_id', 'age_at_visit_start_in_years_int', 'length_of_stay', 'q_score', 'testcount', 'positive_covid_test', 'negative_covid_test', 'suspected_covid', 'in_death_table', 'ecmo', 'aki_in_hospital', 'invasive_ventilation']]
+    # smaller dataframe with just a few columns for testing purposes
+    # sdf = df[['data_partner_id', 'age_at_visit_start_in_years_int', 'length_of_stay', 'q_score', 'testcount', 'positive_covid_test', 'negative_covid_test', 'suspected_covid', 'in_death_table', 'ecmo', 'aki_in_hospital', 'invasive_ventilation']]
 
-# this is bad, but just fill all nulls with mean
-filled_df = df.fillna(df.mean())
+    # this is bad, but just fill all nulls with mean
+    filled_df = df.fillna(df.mean())
 
-scaler.fit(filled_df)
-scaled_df = scaler.transform(filled_df)
+    scaler.fit(filled_df)
+    scaled_df = scaler.transform(filled_df)
 
-#start with all variables for PCA
-my_pca = PCA(n_components=scaled_df.shape[1], random_state=42)
-my_pca.fit(scaled_df)
-pca_arr = my_pca.transform(scaled_df)
+    #start with all variables for PCA
+    my_pca = PCA(n_components=scaled_df.shape[1], random_state=42)
+    my_pca.fit(scaled_df)
+    pca_arr = my_pca.transform(scaled_df)
 
     np.cumsum(my_pca.explained_variance_ratio_ * 100)[2]
 
