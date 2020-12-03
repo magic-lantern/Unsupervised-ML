@@ -7,6 +7,12 @@ from sklearn import preprocessing
 from pyspark.sql import functions as F
 from pyspark.sql.functions import max, mean, min, stddev, lit, regexp_replace, col
 
+# fixes for displaying long/wide dataframes
+#pd.set_option('display.max_rows', None)
+#pd.set_option('display.max_columns', None)
+#pd.set_option('display.width', None)
+#pd.set_option('display.max_colwidth', -1)
+
 @transform_pandas(
     Output(rid="ri.foundry.main.dataset.cef3c32e-767c-4f6a-b669-3920dac46a10"),
     inpatient_ml_dataset=Input(rid="ri.foundry.main.dataset.07927bca-b175-4775-9c55-a371af481cc1")
@@ -52,16 +58,29 @@ def inpatient_encoded_spark(inpatient_encoded):
     Output(rid="ri.vector.main.execute.3d0af307-7bdc-4186-bfd0-ebea8e3d3309"),
     inpatient_encoded=Input(rid="ri.foundry.main.dataset.cef3c32e-767c-4f6a-b669-3920dac46a10")
 )
-def scale_test(inpatient_encoded):
+def pca_analysis(inpatient_encoded):
     df = inpatient_encoded
     prediction = df.bad_outcome
     # take out prediction column
     df = df.drop(columns='bad_outcome')
     scaler = preprocessing.StandardScaler()
-    scaler.fit(df)
-    scaled_df = scaler.transform(df)
+
+    # smaller dataframe with just a few columns for testing purposes
+    # sdf = df[['data_partner_id', 'age_at_visit_start_in_years_int', 'length_of_stay', 'q_score', 'testcount', 'positive_covid_test', 'negative_covid_test', 'suspected_covid', 'in_death_table', 'ecmo', 'aki_in_hospital', 'invasive_ventilation']]
+
+    # this is bad, but just fill all nulls with mean
+    filled_df = df.fillna(df.mean())
+
+    scaler.fit(filled_df)
+    scaled_df = scaler.transform(filled_df)
 
     #start with all variables for PCA
     my_pca = PCA(n_components=scaled_df.shape[1], random_state=42)
     my_pca.fit(scaled_df)
+    pca_df = my_pca.transform(scaled_df)
+
+    plt.plot(np.cumsum(my_pca.explained_variance_ratio_))
+    plt.xlabel('Number of components')
+    plt.ylabel('Explained variance')
+    plt.show()
 
