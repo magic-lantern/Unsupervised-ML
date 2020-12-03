@@ -60,6 +60,7 @@ def inpatient_encoded_spark(inpatient_encoded):
     inpatient_encoded=Input(rid="ri.foundry.main.dataset.cef3c32e-767c-4f6a-b669-3920dac46a10")
 )
 def pca_3_comp_analysis(inpatient_encoded):
+    # decent PCA guide available here: https://towardsdatascience.com/principal-component-analysis-pca-with-scikit-learn-1e84a0c731b0
     df = inpatient_encoded
     prediction = df.bad_outcome
     # take out prediction column
@@ -104,7 +105,8 @@ def pca_3_comp_analysis(inpatient_encoded):
     ax.set_xlabel('First principal component')
     ax.set_ylabel('Second principal component')
     ax.set_zlabel('Third principal component')
-    plt.title('PCA 3D scatter plot - ', round(np.cumsum(my_pca.explained_variance_ratio_ * 100)[2]), '% of variance captured', sep='')
+    mytitle = 'PCA 3D scatter plot - ' + round(np.cumsum(my_pca.explained_variance_ratio_ * 100)[2]) + '% of variance captured'
+    plt.title(mytitle)
     plt.show()
 
     # see https://stackoverflow.com/questions/22984335/recovering-features-names-of-explained-variance-ratio-in-pca-with-sklearn
