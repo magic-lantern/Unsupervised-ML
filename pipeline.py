@@ -85,7 +85,7 @@ def pca_analysis(inpatient_encoded):
     plt.ylabel('Explained variance')
     plt.show()
 
-    # now the top 3
+    # now the top 3 viewed with outcome
     pca_3 = PCA(n_components=3, random_state=42)
     pca_3.fit(scaled_df)
     pca_3_arr = pca_3.transform(scaled_df)
@@ -101,8 +101,13 @@ def pca_analysis(inpatient_encoded):
         s=50,
         alpha=0.6)
 
+    legend1 = ax.legend(*splt.legend_elements(), title="bad_outcome")
+    ax.add_artist(legend1)
+
     ax.set_xlabel('First principal component')
     ax.set_ylabel('Second principal component')
     ax.set_zlabel('Third principal component')
     plt.show()
+
+    return pd.DataFrame(pca_3.components_, columns=filled_df.columns,index = ['PC-1','PC-2', 'PC-3'])
 
