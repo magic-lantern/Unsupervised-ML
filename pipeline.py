@@ -13,6 +13,7 @@ from pyspark.sql.functions import max, mean, min, stddev, lit, regexp_replace, c
 #pd.set_option('display.max_columns', None)
 #pd.set_option('display.width', None)
 #pd.set_option('display.max_colwidth', -1)
+#np.set_printoptions(threshold=np.inf)
 
 @transform_pandas(
     Output(rid="ri.foundry.main.dataset.64abd514-65b6-42f8-8075-0e63f23fcd0d"),
@@ -250,4 +251,11 @@ def pca_explained_variance(inpatient_encoded):
     plt.xlabel('Number of components')
     plt.ylabel('Explained variance')
     plt.show()
+
+@transform_pandas(
+    Output(rid="ri.vector.main.execute.f3e8f965-806c-4393-a275-a39c152b6b8a"),
+    inpatient_encoded=Input(rid="ri.foundry.main.dataset.cef3c32e-767c-4f6a-b669-3920dac46a10")
+)
+def unnamed(inpatient_encoded):
+    
 
