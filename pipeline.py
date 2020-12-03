@@ -236,7 +236,7 @@ def pca_2b_comp_analysis(inpatient_scaled_w_imputation):
     plt.show()
 
     # see https://stackoverflow.com/questions/22984335/recovering-features-names-of-explained-variance-ratio-in-pca-with-sklearn
-    return spark.createDataFrame(pd.DataFrame(pca_2.components_, columns=filled_df.columns,index = ['PC-1','PC-2']).reset_index())
+    return spark.createDataFrame(pd.DataFrame(pca_2.components_, columns=df.columns,index = ['PC-1','PC-2']).reset_index())
 
 @transform_pandas(
     Output(rid="ri.foundry.main.dataset.a230c6e9-ece6-46e0-89aa-c9414533899f"),
