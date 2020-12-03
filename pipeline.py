@@ -209,7 +209,7 @@ def pca_2b_comp_analysis(inpatient_scaled_w_imputation):
     prediction = df.bad_outcome
     # take out prediction column
     df = df.drop(columns='bad_outcome')
-    scaled_arr = df.values()
+    scaled_arr = df.values
 
     #start with all variables for PCA
     my_pca = PCA(n_components=scaled_arr.shape[1], random_state=42)
