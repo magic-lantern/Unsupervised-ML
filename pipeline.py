@@ -15,6 +15,14 @@ from pyspark.sql.functions import max, mean, min, stddev, lit, regexp_replace, c
 #pd.set_option('display.max_colwidth', -1)
 
 @transform_pandas(
+    Output(rid="ri.foundry.main.dataset.64abd514-65b6-42f8-8075-0e63f23fcd0d"),
+    inpatient_encoded=Input(rid="ri.foundry.main.dataset.cef3c32e-767c-4f6a-b669-3920dac46a10")
+)
+def data_by_site(inpatient_encoded):
+    sites_with_values = df.groupby('data_partner_id').count()
+    return sites_with_values.reset_index()
+
+@transform_pandas(
     Output(rid="ri.foundry.main.dataset.cef3c32e-767c-4f6a-b669-3920dac46a10"),
     inpatient_ml_dataset=Input(rid="ri.foundry.main.dataset.07927bca-b175-4775-9c55-a371af481cc1")
 )
@@ -191,11 +199,4 @@ def pca_ranked_features(inpatient_encoded):
     sdf = sdf.sort(col('pc-1-val').desc())
 
     return sdf
-
-@transform_pandas(
-    Output(rid="ri.vector.main.execute.18ca31a7-1b6e-4f48-8f75-37db21be45fb"),
-    inpatient_encoded=Input(rid="ri.foundry.main.dataset.cef3c32e-767c-4f6a-b669-3920dac46a10")
-)
-def unnamed(inpatient_encoded):
-    
 
