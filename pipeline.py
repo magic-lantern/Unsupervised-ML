@@ -81,8 +81,6 @@ def pca_3_comp_analysis(inpatient_encoded):
     my_pca.fit(scaled_df)
     pca_arr = my_pca.transform(scaled_df)
 
-    np.cumsum(my_pca.explained_variance_ratio_ * 100)[2]
-
     # now the top 3 viewed with outcome
     pca_3 = PCA(n_components=3, random_state=42)
     pca_3.fit(scaled_df)
@@ -110,7 +108,7 @@ def pca_3_comp_analysis(inpatient_encoded):
     plt.show()
 
     # see https://stackoverflow.com/questions/22984335/recovering-features-names-of-explained-variance-ratio-in-pca-with-sklearn
-    return spark.createDataFrame(pd.DataFrame(pca_3.components_, columns=filled_df.columns,index = ['PC-1','PC-2', 'PC-3']))
+    return spark.createDataFrame(pd.DataFrame(pca_3.components_, columns=filled_df.columns,index = ['PC-1','PC-2', 'PC-3']).reset_index())
 
 @transform_pandas(
     Output(rid="ri.vector.main.execute.17ab7d1e-d4f3-4a5f-98a7-f63f5997c021"),
@@ -143,6 +141,53 @@ def pca_explained_variance(inpatient_encoded):
     Output(rid="ri.vector.main.execute.1a222f7d-5961-495e-8e27-b6e4063ee7c7"),
     inpatient_encoded=Input(rid="ri.foundry.main.dataset.cef3c32e-767c-4f6a-b669-3920dac46a10")
 )
-def unnamed(inpatient_encoded):
-    
+def pca_ranked_features(inpatient_encoded):
+    # based on https://stackoverflow.com/a/56722874
+    df = inpatient_encoded
+    prediction = df.bad_outcome
+    # take out prediction column
+    df = df.drop(columns='bad_outcome')
+    scaler = preprocessing.StandardScaler()
+
+    # this is bad, but just fill all nulls with mean
+    filled_df = df.fillna(df.mean())
+
+    scaler.fit(filled_df)
+    scaled_df = scaler.transform(filled_df)
+
+    #start with all variables for PCA
+    my_pca = PCA(n_components=scaled_df.shape[1], random_state=42)
+    my_pca.fit(scaled_df)
+    pca_arr = my_pca.transform(scaled_df)
+
+    np.cumsum(my_pca.explained_variance_ratio_ * 100)[2]
+
+    # now the top 3 viewed with outcome
+    pca_3 = PCA(n_components=3, random_state=42)
+    pca_3.fit(scaled_df)
+    pca_3_arr = pca_3.transform(scaled_df)
+
+    fig = plt.figure(figsize = (12, 8))
+    ax = plt.axes(projection="3d")
+
+    splt = ax.scatter3D(
+        pca_3_arr[:, 0],
+        pca_3_arr[:, 1],
+        pca_3_arr[:, 2],
+        c = prediction,
+        s=50,
+        alpha=0.6)
+
+    legend1 = ax.legend(*splt.legend_elements(), title='bad_outcome')
+    ax.add_artist(legend1)
+
+    ax.set_xlabel('First principal component')
+    ax.set_ylabel('Second principal component')
+    ax.set_zlabel('Third principal component')
+    mytitle = 'PCA 3D scatter plot - ' + str(round(np.cumsum(my_pca.explained_variance_ratio_ * 100)[2])) + '% of variance captured'
+    plt.title(mytitle)
+    plt.show()
+
+    # see https://stackoverflow.com/questions/22984335/recovering-features-names-of-explained-variance-ratio-in-pca-with-sklearn
+    return spark.createDataFrame(pd.DataFrame(pca_3.components_, columns=filled_df.columns,index = ['PC-1','PC-2', 'PC-3']))
 
