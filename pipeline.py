@@ -5,8 +5,12 @@ from mpl_toolkits import mplot3d
 import seaborn as sns
 from sklearn.decomposition import PCA, IncrementalPCA
 from sklearn import preprocessing
+from sklearn.preprocessing import StandardScaler
+import sklearn.cluster as cluster
+from sklearn.metrics import adjusted_rand_score, adjusted_mutual_info_score
 from pyspark.sql import functions as F
 from pyspark.sql.functions import max, mean, min, stddev, lit, regexp_replace, col
+import umap
 
 # fixes for displaying long/wide dataframes
 #pd.set_option('display.max_rows', None)
@@ -290,23 +294,24 @@ def pca_explained_variance(inpatient_encoded):
     inpatient_encoded=Input(rid="ri.foundry.main.dataset.cef3c32e-767c-4f6a-b669-3920dac46a10")
 )
 def umap_analysis(inpatient_encoded):
-  from sklearn.preprocessing import StandardScaler
-  # Dimension reduction and clustering libraries
-  import umap
-  #import hdbscan
-  import sklearn.cluster as cluster
-  from sklearn.metrics import adjusted_rand_score, adjusted_mutual_info_score
-  df = unique_unit_vs_measurement_concept.toPandas()
-  reducer = umap.UMAP()
-  # format data for UMAP input
-  measurements_data = df.values
-  scaled_measurements_data = StandardScaler().fit_transform(measurements_data)
-  embedding = reducer.fit_transform(scaled_measurements_data)
-  print(embedding.shape)
-  plt.scatter(embedding[:, 0],embedding[:, 1])
-  plt.gca().set_aspect(‘equal’, ‘datalim’)
-  plt.title(‘measurement concept UMAP projection’, fontsize=20)
-  plt.show()
-  return
+df = inpatient_encoded
+reducer = umap.UMAP()
+# format data for UMAP input
+measurements_data = df.values
+scaled_measurements_data = StandardScaler().fit_transform(measurements_data)
+embedding = reducer.fit_transform(scaled_measurements_data)
+print(embedding.shape)
+plt.scatter(embedding[:, 0],embedding[:, 1])
+plt.gca().set_aspect(‘equal’, ‘datalim’)
+plt.title(‘measurement concept UMAP projection’, fontsize=20)
+plt.show()
+return
 
+
+@transform_pandas(
+    Output(rid="ri.vector.main.execute.e90db4f9-2d92-4cd6-a25a-2a0d539131f8"),
+    inpatient_encoded=Input(rid="ri.foundry.main.dataset.cef3c32e-767c-4f6a-b669-3920dac46a10")
+)
+def unnamed(inpatient_encoded):
+    
 
