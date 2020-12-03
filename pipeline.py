@@ -105,7 +105,7 @@ def pca_3_comp_analysis(inpatient_encoded):
     ax.set_xlabel('First principal component')
     ax.set_ylabel('Second principal component')
     ax.set_zlabel('Third principal component')
-    mytitle = 'PCA 3D scatter plot - ' + round(np.cumsum(my_pca.explained_variance_ratio_ * 100)[2]) + '% of variance captured'
+    mytitle = 'PCA 3D scatter plot - ' + str(round(np.cumsum(my_pca.explained_variance_ratio_ * 100)[2])) + '% of variance captured'
     plt.title(mytitle)
     plt.show()
 
