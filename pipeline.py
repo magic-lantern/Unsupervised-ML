@@ -60,13 +60,13 @@ def inpatient_encoded_spark(inpatient_encoded):
     inpatient_encoded=Input(rid="ri.foundry.main.dataset.cef3c32e-767c-4f6a-b669-3920dac46a10")
 )
 def missing_data_info(inpatient_encoded):
-    df = inpatient_encoded
-    missing_df = df.isnull().sum().to_frame()
-    missing_df = missing_df.rename(columns = {0:'null_count'})
-    missing_df['pct_missing'] = missing_df['null_count'] / df.shape[0]
-    missing_df = missing_df.reset_index()
-    missing_df = missing_df.rename(columns = {'index':'variable'})
-    missing_df = missing_df.sort_values('pct_missing', ascending=False)
+        df = inpatient_encoded
+        missing_df = df.isnull().sum().to_frame()
+        missing_df = missing_df.rename(columns = {0:'null_count'})
+        missing_df['pct_missing'] = missing_df['null_count'] / df.shape[0]
+        missing_df = missing_df.reset_index()
+        missing_df = missing_df.rename(columns = {'index':'variable'})
+        missing_df = missing_df.sort_values('pct_missing', ascending=False)
     return missing_df
 
 @transform_pandas(
@@ -191,4 +191,11 @@ def pca_ranked_features(inpatient_encoded):
     sdf = sdf.sort(col('pc-1-val').desc())
 
     return sdf
+
+@transform_pandas(
+    Output(rid="ri.vector.main.execute.18ca31a7-1b6e-4f48-8f75-37db21be45fb"),
+    inpatient_encoded=Input(rid="ri.foundry.main.dataset.cef3c32e-767c-4f6a-b669-3920dac46a10")
+)
+def unnamed(inpatient_encoded):
+    
 
