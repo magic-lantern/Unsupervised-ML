@@ -206,3 +206,10 @@ def pca_ranked_features(inpatient_encoded):
 
     return sdf
 
+@transform_pandas(
+    Output(rid="ri.vector.main.execute.6f09f6d3-cd09-4aa6-8760-b610f5f3cd2d"),
+    inpatient_encoded=Input(rid="ri.foundry.main.dataset.cef3c32e-767c-4f6a-b669-3920dac46a10")
+)
+def unnamed(inpatient_encoded):
+    
+
