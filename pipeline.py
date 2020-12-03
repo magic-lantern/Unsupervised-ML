@@ -139,3 +139,10 @@ def pca_explained_variance(inpatient_encoded):
     plt.ylabel('Explained variance')
     plt.show()
 
+@transform_pandas(
+    Output(rid="ri.vector.main.execute.1a222f7d-5961-495e-8e27-b6e4063ee7c7"),
+    inpatient_encoded=Input(rid="ri.foundry.main.dataset.cef3c32e-767c-4f6a-b669-3920dac46a10")
+)
+def unnamed(inpatient_encoded):
+    
+
