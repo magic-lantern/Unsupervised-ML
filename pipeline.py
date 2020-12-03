@@ -175,3 +175,10 @@ def pca_ranked_features(inpatient_encoded):
 
     return spark.createDataFrame(pd.concat([pc1_df, pc2_df, pc3_df], axis=1)).sort('pc-1-val')
 
+@transform_pandas(
+    Output(rid="ri.vector.main.execute.2ac8a8fd-c395-4c49-84fe-3404d8ede65d"),
+    inpatient_encoded=Input(rid="ri.foundry.main.dataset.cef3c32e-767c-4f6a-b669-3920dac46a10")
+)
+def unnamed(inpatient_encoded):
+    
+
