@@ -348,8 +348,8 @@ def umap_analysis( inpatient_scaled_w_imputation):
     print(embedding.shape)
 
     plt.scatter(embedding[:, 0],embedding[:, 1])
-    plt.gca().set_aspect(‘equal’, ‘datalim’)
-    plt.title(‘measurement concept UMAP projection’, fontsize=20)
+    plt.gca().set_aspect('equal', 'datalim')
+    plt.title('measurement concept UMAP projection', fontsize=20)
     plt.show()
 return
 
