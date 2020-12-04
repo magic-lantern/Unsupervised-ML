@@ -255,7 +255,7 @@ def pca3_ranked_features( inpatient_scaled_w_imputation):
 def pca_2_comp_analysis( inpatient_scaled_w_imputation, outcomes):
     # decent PCA guide available here: https://towardsdatascience.com/principal-component-analysis-pca-with-scikit-learn-1e84a0c731b0
     df = inpatient_scaled_w_imputation
-    dfo = outcomes.toPandas()
+    dfo = outcomes
     prediction = dfo.bad_outcome
     # take out visit_occurrence_id column
     df = df.drop(columns='visit_occurrence_id')
@@ -296,7 +296,7 @@ def pca_2_comp_analysis( inpatient_scaled_w_imputation, outcomes):
 def pca_3_comp_analysis( inpatient_scaled_w_imputation, outcomes):
     # decent PCA guide available here: https://towardsdatascience.com/principal-component-analysis-pca-with-scikit-learn-1e84a0c731b0
     df = inpatient_scaled_w_imputation
-    dfo = outcomes.toPandas()
+    dfo = outcomes
     
     df = df.drop(columns='visit_occurrence_id')
     scaled_arr = df.values
@@ -318,7 +318,7 @@ def pca_3_comp_analysis( inpatient_scaled_w_imputation, outcomes):
         pca_3_arr[:, 0],
         pca_3_arr[:, 1],
         pca_3_arr[:, 2],
-        c = dfo['length_of_stay'],
+        c = dfo['bad_outcome'],
         s=50,
         alpha=0.6)
 
