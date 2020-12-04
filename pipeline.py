@@ -312,20 +312,14 @@ def pca_3_dataset(inpatient_encoded):
 
 @transform_pandas(
     Output(rid="ri.vector.main.execute.17ab7d1e-d4f3-4a5f-98a7-f63f5997c021"),
-    inpatient_encoded=Input(rid="ri.foundry.main.dataset.cef3c32e-767c-4f6a-b669-3920dac46a10")
+    inpatient_scaled_w_imputation=Input(rid="ri.foundry.main.dataset.f410db35-59e0-4b82-8fa8-d6dc6a61c9f2")
 )
-def pca_explained_variance(inpatient_encoded):
-    df = inpatient_encoded
+def pca_explained_variance( inpatient_scaled_w_imputation):
+    df = inpatient_scaled_w_imputation
     prediction = df.bad_outcome
     # take out prediction column
     df = df.drop(columns='bad_outcome')
-    scaler = preprocessing.StandardScaler()
-
-    # this is bad, but just fill all nulls with median
-    filled_df = df.fillna(df.median())
-
-    scaler.fit(filled_df)
-    scaled_df = scaler.transform(filled_df)
+    scaled_arr = df.values
 
     #start with all variables for PCA
     my_pca = PCA(n_components=scaled_df.shape[1], random_state=42)
