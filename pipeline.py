@@ -58,7 +58,7 @@ def inpatient_encoded(inpatient_ml_dataset):
     sdf = sdf.drop('invasive_ventilation')
 
     # these columns are 90% or greater NULL
-    sdf = sdf.drop('miscellaneous_program', 'department_of_corrections', 'department_of_defense', 'other_government_federal_state_local_excluding_department_of_corrections', 'd-dimer_mg_l_feu', 'no_payment_from_an_organization_agency_program_private_payer_listed', 'procalcitonin_ng_ml', 'erythrocyte_sed_rate_mm_hr', 'bnp_pg_ml', 'nt_pro_bnp_pg_ml', 'medicaid', 'private_health_insurance', 'ferritin_ng_ml', 'medicare', 'payer_no_matching_concept')
+    sdf = sdf.drop('miscellaneous_program', 'department_of_corrections', 'department_of_defense', 'other_government_federal_state_local_excluding_department_of_corrections', 'no_payment_from_an_organization_agency_program_private_payer_listed', 'procalcitonin_ng_ml', 'erythrocyte_sed_rate_mm_hr', 'bnp_pg_ml', 'nt_pro_bnp_pg_ml', 'medicaid', 'private_health_insurance', 'ferritin_ng_ml', 'medicare', 'payer_no_matching_concept')
 
     df = sdf.toPandas()
 
