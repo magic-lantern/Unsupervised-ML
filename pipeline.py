@@ -263,7 +263,7 @@ def pca_3_comp_analysis( inpatient_scaled_w_imputation):
     pca_3.fit(scaled_arr)
     pca_3_arr = pca_3.transform(scaled_arr)
 
-    fig = plt.figure(figsize = (14, 8))
+    fig = plt.figure(figsize = (12, 12))
     ax = plt.axes(projection="3d")
 
     splt = ax.scatter3D(
