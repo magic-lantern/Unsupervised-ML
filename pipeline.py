@@ -124,6 +124,7 @@ def inpatient_encoded_spark(inpatient_encoded):
 )
 def inpatient_encoded_w_imputation(inpatient_encoded):
     df = inpatient_encoded
+    df = df.drop(columns='data_partner_id')
 
     df['bnp_pg_ml'] = df['bnp_pg_ml'].fillna(100)
     df['c-reactive_protein_crp_mg_l'] = df['c-reactive_protein_crp_mg_l'].fillna(10)
@@ -138,6 +139,7 @@ def inpatient_encoded_w_imputation(inpatient_encoded):
     
     # fill these with False
     df['medicare'] = df['medicare'].fillna(False)
+    df['payer_no_matching_concept'] = df['payer_no_matching_concept'].fillna(False)
 
     # now fill the rest with the median
     df = df.fillna(df.median())
