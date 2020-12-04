@@ -155,7 +155,7 @@ def missing_data_info(inpatient_encoded):
     inpatient_encoded_all_cols=Input(rid="ri.foundry.main.dataset.5d31d8ed-ed3e-4304-96f7-9cc2554ed092")
 )
 def missing_data_info_all_cols(inpatient_encoded_all_cols):
-    df = inpatient_encoded_all_cols
+    df = inpatient_encoded_all_cols.toDF()
     missing_df = df.isnull().sum().to_frame()
     missing_df = missing_df.rename(columns = {0:'null_count'})
     missing_df['pct_missing'] = missing_df['null_count'] / df.shape[0]
