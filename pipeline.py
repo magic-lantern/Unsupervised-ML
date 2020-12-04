@@ -298,10 +298,7 @@ def pca_3_comp_analysis( inpatient_scaled_w_imputation, outcomes):
     df = inpatient_scaled_w_imputation
     dfo = outcomes.toPandas()
     
-    # make sure outcomes are aligned with rest of data
-    df = df.merge(dfo)
-    # take out visit_occurrence_id column
-    df = df.drop(columns=dfo.columns)
+    df = df.drop(columns='visit_occurrence_id')
     scaled_arr = df.values
 
     #start with all variables for PCA
@@ -321,7 +318,7 @@ def pca_3_comp_analysis( inpatient_scaled_w_imputation, outcomes):
         pca_3_arr[:, 0],
         pca_3_arr[:, 1],
         pca_3_arr[:, 2],
-        c = dfo['bad_outcome'],
+        c = dfo['data_partner_id'],
         s=50,
         alpha=0.6)
 
