@@ -175,6 +175,25 @@ def missing_data_info_all_cols(inpatient_encoded_all_cols):
     return missing_df
 
 @transform_pandas(
+    Output(rid="ri.foundry.main.dataset.3d9b1654-3923-484f-8db5-6b38b56e290c"),
+    inpatient_ml_dataset=Input(rid="ri.foundry.main.dataset.07927bca-b175-4775-9c55-a371af481cc1")
+)
+def outcomes(inpatient_ml_dataset):
+    df = inpatient_ml_dataset
+    df = df.select('visit_occurrence_id',
+                   'person_id',
+                   'visit_concept_name',
+                   'covid_status_name',
+                   'in_death_table',
+                   'severity_type',
+                   'length_of_stay',
+                   'ecmo',
+                   'aki_in_hospital',
+                   'invasive_ventilation',
+                   'bad_outcome')
+    return df
+
+@transform_pandas(
     Output(rid="ri.foundry.main.dataset.e6967b18-d64f-4539-9a9f-7ae3a5eef700"),
     inpatient_scaled_w_imputation=Input(rid="ri.foundry.main.dataset.f410db35-59e0-4b82-8fa8-d6dc6a61c9f2")
 )
@@ -362,11 +381,4 @@ def umap_analysis( inpatient_scaled_w_imputation):
     plt.show()
     return
 
-
-@transform_pandas(
-    Output(rid="ri.vector.main.execute.39acfe00-7dab-404c-ad82-9ebb9de02cc8"),
-    inpatient_ml_dataset=Input(rid="ri.foundry.main.dataset.07927bca-b175-4775-9c55-a371af481cc1")
-)
-def unnamed(inpatient_ml_dataset):
-    
 
