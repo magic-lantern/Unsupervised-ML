@@ -151,6 +151,20 @@ def missing_data_info(inpatient_encoded):
     return missing_df
 
 @transform_pandas(
+    Output(rid="ri.foundry.main.dataset.71dc050c-5c6a-442b-8b87-31b45277459a"),
+    inpatient_encoded_all_cols=Input(rid="ri.foundry.main.dataset.5d31d8ed-ed3e-4304-96f7-9cc2554ed092")
+)
+def missing_data_info_all_cols(inpatient_encoded_all_cols):
+    df = inpatient_encoded_all_cols
+    missing_df = df.isnull().sum().to_frame()
+    missing_df = missing_df.rename(columns = {0:'null_count'})
+    missing_df['pct_missing'] = missing_df['null_count'] / df.shape[0]
+    missing_df = missing_df.reset_index()
+    missing_df = missing_df.rename(columns = {'index':'variable'})
+    missing_df = missing_df.sort_values('pct_missing', ascending=False)
+    return missing_df
+
+@transform_pandas(
     Output(rid="ri.foundry.main.dataset.e6967b18-d64f-4539-9a9f-7ae3a5eef700"),
     inpatient_scaled_w_imputation=Input(rid="ri.foundry.main.dataset.f410db35-59e0-4b82-8fa8-d6dc6a61c9f2")
 )
@@ -350,11 +364,4 @@ plt.title(‘measurement concept UMAP projection’, fontsize=20)
 plt.show()
 return
 
-
-@transform_pandas(
-    Output(rid="ri.vector.main.execute.de8f1180-78f8-4f66-8606-4cdeeaacda92"),
-    inpatient_encoded_all_cols=Input(rid="ri.foundry.main.dataset.5d31d8ed-ed3e-4304-96f7-9cc2554ed092")
-)
-def unnamed(inpatient_encoded_all_cols):
-    
 
