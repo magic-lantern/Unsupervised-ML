@@ -405,21 +405,12 @@ def umap3d_embedding(inpatient_scaled_w_imputation):
 
 @transform_pandas(
     Output(rid="ri.vector.main.execute.727dca65-eb02-41a3-b741-343d7b848573"),
-    inpatient_scaled_w_imputation=Input(rid="ri.foundry.main.dataset.f410db35-59e0-4b82-8fa8-d6dc6a61c9f2"),
-    outcomes=Input(rid="ri.foundry.main.dataset.3d9b1654-3923-484f-8db5-6b38b56e290c")
+    outcomes=Input(rid="ri.foundry.main.dataset.3d9b1654-3923-484f-8db5-6b38b56e290c"),
+    umap2d_embedding=Input(rid="ri.foundry.main.dataset.ba772263-cc7a-41ab-82a2-0203139bbbf4")
 )
-def umap_analysis( inpatient_scaled_w_imputation, outcomes):
-    df = inpatient_scaled_w_imputation
+def umap_analysis( outcomes, umap2d_embedding):
+    embedding = umap2d_embedding.values
     dfo = outcomes
-    prediction = dfo.bad_outcome
-    # take out visit_occurrence_id column
-    df = df.drop(columns='visit_occurrence_id')
-    
-    scaled_arr = df.values
-
-    reducer = umap.UMAP(random_state=42)
-    reducer.fit(scaled_arr)
-    embedding = reducer.transform(scaled_arr)
 
     #embedding = reducer.fit_transform(scaled_arr)
     #print(embedding.shape)
@@ -430,11 +421,11 @@ def umap_analysis( inpatient_scaled_w_imputation, outcomes):
 
     splt = sns.scatterplot(x = embedding[:, 0],
                             y = embedding[:, 1],
-                            hue = prediction,
+                            hue = df.bad_outcome,
                             alpha = 0.6)
     plt.title('UMAP 2D scatter plot')
     plt.show()
-
+    
     return
 
 
