@@ -297,9 +297,11 @@ def pca_3_comp_analysis( inpatient_scaled_w_imputation, outcomes):
     # decent PCA guide available here: https://towardsdatascience.com/principal-component-analysis-pca-with-scikit-learn-1e84a0c731b0
     df = inpatient_scaled_w_imputation
     dfo = outcomes.toPandas()
-    visit_occurrence_id = df.visit_occurrence_id
+    
+    # make sure outcomes are aligned with rest of data
+    df = df.merge(dfo)
     # take out visit_occurrence_id column
-    df = df.drop(columns='visit_occurrence_id')
+    df = df.drop(columns=dfo.columns)
     scaled_arr = df.values
 
     #start with all variables for PCA
