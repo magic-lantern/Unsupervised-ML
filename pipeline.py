@@ -390,7 +390,7 @@ def umap2d_embedding(inpatient_scaled_w_imputation):
 
 
 @transform_pandas(
-    Output(rid="ri.vector.main.execute.d20e1272-116e-49a3-b77c-13df0df3fc15"),
+    Output(rid="ri.foundry.main.dataset.c135a77f-4b71-4df9-abfe-be348abfc6a8"),
     inpatient_scaled_w_imputation=Input(rid="ri.foundry.main.dataset.f410db35-59e0-4b82-8fa8-d6dc6a61c9f2")
 )
 def umap3d_embedding(inpatient_scaled_w_imputation):
