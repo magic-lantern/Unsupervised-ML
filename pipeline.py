@@ -49,7 +49,6 @@ def inpatient_encoded(inpatient_ml_dataset):
     sdf = sdf.drop('person_id')
     sdf = sdf.drop('visit_concept_id')
     sdf = sdf.drop('visit_concept_name')
-    sdf = sdf.drop('visit_occurrence_id')
     sdf = sdf.drop('in_death_table')
     sdf = sdf.drop('severity_type')
     sdf = sdf.drop('length_of_stay')
@@ -142,17 +141,13 @@ def inpatient_encoded_w_imputation(inpatient_encoded):
 
 @transform_pandas(
     Output(rid="ri.foundry.main.dataset.f410db35-59e0-4b82-8fa8-d6dc6a61c9f2"),
-    inpatient_encoded=Input(rid="ri.foundry.main.dataset.cef3c32e-767c-4f6a-b669-3920dac46a10")
+    inpatient_encoded_w_imputation=Input(rid="ri.foundry.main.dataset.d3578a81-014a-49a6-9887-53d296155bdd")
 )
-def inpatient_scaled_w_imputation(inpatient_encoded):
-    df = inpatient_encoded
+def inpatient_scaled_w_imputation( inpatient_encoded_w_imputation):
+    df = inpatient_encoded_w_imputation
 
     prediction = df.bad_outcome
-    filled_df = df.drop(columns='bad_outcome')
-
-    # this is bad, but just fill all nulls with median
-    # try mo'bettah imputation later
-    filled_df = filled_df.fillna(filled_df.median())
+    df = df.drop(columns='bad_outcome')
 
     scaler = StandardScaler()
     scaler.fit(filled_df)
