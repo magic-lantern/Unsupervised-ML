@@ -290,12 +290,16 @@ def pca_explained_variance( inpatient_scaled_w_imputation):
 )
 def umap_analysis( inpatient_scaled_w_imputation):
 df = inpatient_scaled_w_imputation
+df = df.sample(frac=0.33333)
 prediction = df.bad_outcome
 # take out prediction column
 df = df.drop(columns='bad_outcome')
 scaled_arr = df.values
 
-reducer = umap.UMAP()
+reducer = umap.UMAP(low_memory=True, random_state=42)
+reducer.fit(scaled_arr)
+embedding = reducer.transform(scaled_arr)
+
 embedding = reducer.fit_transform(scaled_arr)
 
 print(embedding.shape)
@@ -306,4 +310,11 @@ plt.title(‘measurement concept UMAP projection’, fontsize=20)
 plt.show()
 return
 
+
+@transform_pandas(
+    Output(rid="ri.vector.main.execute.3ae66653-30d8-4692-9da4-e161b2ca9d3e"),
+    inpatient_ml_dataset=Input(rid="ri.foundry.main.dataset.07927bca-b175-4775-9c55-a371af481cc1")
+)
+def unnamed(inpatient_ml_dataset):
+    
 
