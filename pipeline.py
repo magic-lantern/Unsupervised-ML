@@ -123,11 +123,11 @@ def missing_data_info(inpatient_encoded):
     inpatient_scaled_w_imputation=Input(rid="ri.foundry.main.dataset.f410db35-59e0-4b82-8fa8-d6dc6a61c9f2")
 )
 def pca3_ranked_features( inpatient_scaled_w_imputation):
-        df = inpatient_scaled_w_imputation
-        prediction = df.bad_outcome
-        # take out prediction column
-        df = df.drop(columns='bad_outcome')
-        scaled_arr = df.values
+    df = inpatient_scaled_w_imputation
+    prediction = df.bad_outcome
+    # take out prediction column
+    df = df.drop(columns='bad_outcome')
+    scaled_arr = df.values
 
     # now the top 3 viewed with outcome
     pca_3 = PCA(n_components=3, random_state=42)
