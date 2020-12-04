@@ -476,6 +476,7 @@ def umap3d_viz_site(umap3d_embedding, outcomes):
                         y=embedding[:, 1],
                         z=embedding[:, 2],
                         color=dfo.data_partner_id,
+                        opacity=0.6,
                         title="UMAP 3D by Site")
     fig.show()
     
