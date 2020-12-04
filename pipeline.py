@@ -233,24 +233,15 @@ def pca_2b_comp_analysis(inpatient_scaled_w_imputation):
 
 @transform_pandas(
     Output(rid="ri.foundry.main.dataset.a230c6e9-ece6-46e0-89aa-c9414533899f"),
-    inpatient_encoded=Input(rid="ri.foundry.main.dataset.cef3c32e-767c-4f6a-b669-3920dac46a10")
+    inpatient_scaled_w_imputation=Input(rid="ri.foundry.main.dataset.f410db35-59e0-4b82-8fa8-d6dc6a61c9f2")
 )
-def pca_3_comp_analysis(inpatient_encoded):
+def pca_3_comp_analysis( inpatient_scaled_w_imputation):
     # decent PCA guide available here: https://towardsdatascience.com/principal-component-analysis-pca-with-scikit-learn-1e84a0c731b0
-    df = inpatient_encoded
+    df = inpatient_scaled_w_imputation
     prediction = df.bad_outcome
     # take out prediction column
     df = df.drop(columns='bad_outcome')
-    scaler = preprocessing.StandardScaler()
-
-    # smaller dataframe with just a few columns for testing purposes
-    # sdf = df[['data_partner_id', 'age_at_visit_start_in_years_int', 'length_of_stay', 'q_score', 'testcount', 'positive_covid_test', 'negative_covid_test', 'suspected_covid', 'in_death_table', 'ecmo', 'aki_in_hospital', 'invasive_ventilation']]
-
-    # this is bad, but just fill all nulls with median
-    filled_df = df.fillna(df.median())
-
-    scaler.fit(filled_df)
-    scaled_df = scaler.transform(filled_df)
+    scaled_arr = df.values
 
     #start with all variables for PCA
     my_pca = PCA(n_components=scaled_df.shape[1], random_state=42)
@@ -284,7 +275,7 @@ def pca_3_comp_analysis(inpatient_encoded):
     plt.show()
 
     # see https://stackoverflow.com/questions/22984335/recovering-features-names-of-explained-variance-ratio-in-pca-with-sklearn
-    return spark.createDataFrame(pd.DataFrame(pca_3.components_, columns=filled_df.columns,index = ['PC-1','PC-2', 'PC-3']).reset_index())
+    return spark.createDataFrame(pd.DataFrame(pca_3.components_, columns=df.columns,index = ['PC-1','PC-2', 'PC-3']).reset_index())
 
 @transform_pandas(
     Output(rid="ri.foundry.main.dataset.78eb8376-28de-4705-b6b1-d5d2cf520b45"),
