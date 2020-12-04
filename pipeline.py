@@ -437,6 +437,7 @@ def umap3d_viz_bad_outcome(umap3d_embedding, outcomes):
                         y=embedding[:, 1],
                         z=embedding[:, 2],
                         color=dfo.bad_outcome,
+                        opacity=0.6,
                         title="UMAP 3D by Bad Outcome")
     fig.show()
     
