@@ -123,8 +123,8 @@ def pca3_ranked_features( inpatient_scaled_w_imputation):
 
     # now the top 3 viewed with outcome
     pca_3 = PCA(n_components=3, random_state=42)
-    pca_3.fit(scaled_df)
-    pca_3_arr = pca_3.transform(scaled_df)
+    pca_3.fit(scaled_arr)
+    pca_3_arr = pca_3.transform(scaled_arr)
 
     pca_df = pd.DataFrame(pca_3.components_, columns=df.columns,index = ['PC-1','PC-2', 'PC-3'])
     pt = pca_df.transpose().abs()
