@@ -137,7 +137,7 @@ def inpatient_encoded_w_imputation(inpatient_encoded):
     df.loc[(df.gender_male == False) & (df.gender_no_matching_concept == False) & (df.ferritin_ng_ml.isna()), 'ferritin_ng_ml'] = 75
     
     # now fill the rest with the median
-    df.fillna(df.median())
+    df = df.fillna(df.median())
 
     return df
 
@@ -196,6 +196,7 @@ def outcomes(inpatient_ml_dataset):
     df = inpatient_ml_dataset
     df = df.select('visit_occurrence_id',
                    'person_id',
+                   'data_partner_id',
                    'visit_concept_name',
                    'covid_status_name',
                    'in_death_table',
