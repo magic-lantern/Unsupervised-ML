@@ -33,7 +33,7 @@ def data_by_site( inpatient_encoded):
     inpatient_encoded_all_cols=Input(rid="ri.foundry.main.dataset.5d31d8ed-ed3e-4304-96f7-9cc2554ed092")
 )
 def data_by_site_all_cols( inpatient_encoded_all_cols):
-    df = inpatient_encoded_all_cols
+    df = inpatient_encoded_all_cols.toDF()
     sites_with_values = df.groupby('data_partner_id').count()
     return sites_with_values.reset_index()
 
