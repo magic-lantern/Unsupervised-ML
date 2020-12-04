@@ -375,6 +375,21 @@ def pca_explained_variance( inpatient_scaled_w_imputation):
     plt.show()
 
 @transform_pandas(
+    Output(rid="ri.vector.main.execute.54277bc1-7f33-497e-8306-61388bd615c0"),
+    inpatient_scaled_w_imputation=Input(rid="ri.foundry.main.dataset.f410db35-59e0-4b82-8fa8-d6dc6a61c9f2")
+)
+def umap2d_embedding(inpatient_scaled_w_imputation):
+    df = inpatient_scaled_w_imputation
+    df = df.drop(columns='visit_occurrence_id')
+    scaled_arr = df.values
+
+    reducer = umap.UMAP(random_state=42)
+    reducer.fit(scaled_arr)
+    embedding = reducer.transform(scaled_arr)
+    return embedding
+
+
+@transform_pandas(
     Output(rid="ri.vector.main.execute.727dca65-eb02-41a3-b741-343d7b848573"),
     inpatient_scaled_w_imputation=Input(rid="ri.foundry.main.dataset.f410db35-59e0-4b82-8fa8-d6dc6a61c9f2"),
     outcomes=Input(rid="ri.foundry.main.dataset.3d9b1654-3923-484f-8db5-6b38b56e290c")
@@ -408,11 +423,4 @@ def umap_analysis( inpatient_scaled_w_imputation, outcomes):
 
     return
 
-
-@transform_pandas(
-    Output(rid="ri.vector.main.execute.54277bc1-7f33-497e-8306-61388bd615c0"),
-    inpatient_scaled_w_imputation=Input(rid="ri.foundry.main.dataset.f410db35-59e0-4b82-8fa8-d6dc6a61c9f2")
-)
-def unnamed(inpatient_scaled_w_imputation):
-    
 
