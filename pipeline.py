@@ -215,13 +215,13 @@ def outcomes(inpatient_ml_dataset):
 
 @transform_pandas(
     Output(rid="ri.foundry.main.dataset.e6967b18-d64f-4539-9a9f-7ae3a5eef700"),
-    inpatient_scaled_w_imputation=Input(rid="ri.foundry.main.dataset.f410db35-59e0-4b82-8fa8-d6dc6a61c9f2")
+    inpatient_scaled_w_imputation=Input(rid="ri.foundry.main.dataset.f410db35-59e0-4b82-8fa8-d6dc6a61c9f2"),
+    outcomes=Input(rid="ri.foundry.main.dataset.3d9b1654-3923-484f-8db5-6b38b56e290c")
 )
-def pca3_ranked_features( inpatient_scaled_w_imputation):
-    df = inpatient_scaled_w_imputation
-    
+def pca3_ranked_features( inpatient_scaled_w_imputation, outcomes):
+    dfo = inpatient_scaled_w_imputation
     # take out visit_occurrence_id column
-    df = df.drop(columns='visit_occurrence_id')
+    df = dfo.drop(columns='visit_occurrence_id')
     scaled_arr = df.values
 
     # now the top 3 viewed with outcome
