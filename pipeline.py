@@ -213,8 +213,8 @@ def outcomes(inpatient_ml_dataset):
 def pca3_ranked_features( inpatient_scaled_w_imputation):
     df = inpatient_scaled_w_imputation
     
-    # take out visit_concept_id column
-    df = df.drop(columns='visit_concept_id')
+    # take out visit_occurrence_id column
+    df = df.drop(columns='visit_occurrence_id')
     scaled_arr = df.values
 
     # now the top 3 viewed with outcome
