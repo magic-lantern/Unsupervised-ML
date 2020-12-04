@@ -394,7 +394,7 @@ def umap2d_embedding(inpatient_scaled_w_imputation):
     outcomes=Input(rid="ri.foundry.main.dataset.3d9b1654-3923-484f-8db5-6b38b56e290c"),
     umap2d_embedding=Input(rid="ri.foundry.main.dataset.ba772263-cc7a-41ab-82a2-0203139bbbf4")
 )
-def umap2d_viz( outcomes, umap2d_embedding):
+def umap2d_viz_severity_type( outcomes, umap2d_embedding):
     embedding = umap2d_embedding.values
     dfo = outcomes
     dfo['data_partner_id'] = dfo.data_partner_id.astype('category')
@@ -482,4 +482,24 @@ def umap3d_viz_site(umap3d_embedding, outcomes):
     fig.show()
     
     return
+
+@transform_pandas(
+    Output(rid="ri.vector.main.execute.17db7734-2d32-4646-a31b-f996063c83d8"),
+    outcomes=Input(rid="ri.foundry.main.dataset.3d9b1654-3923-484f-8db5-6b38b56e290c"),
+    umap2d_embedding=Input(rid="ri.foundry.main.dataset.ba772263-cc7a-41ab-82a2-0203139bbbf4")
+)
+def umap2d_viz_severity_type_1( outcomes, umap2d_embedding):
+    embedding = umap2d_embedding.values
+    dfo = outcomes
+    dfo['data_partner_id'] = dfo.data_partner_id.astype('category')
+
+    splt = sns.scatterplot(x = embedding[:, 0],
+                            y = embedding[:, 1],
+                            hue = dfo.severity_type,
+                            alpha = 0.6)
+    plt.title('UMAP 2D scatter plot')
+    plt.show()
+    
+    return
+
 
