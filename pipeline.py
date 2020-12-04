@@ -21,9 +21,9 @@ import umap
 
 @transform_pandas(
     Output(rid="ri.foundry.main.dataset.64abd514-65b6-42f8-8075-0e63f23fcd0d"),
-    inpatient_encoded=Input(rid="ri.foundry.main.dataset.cef3c32e-767c-4f6a-b669-3920dac46a10")
+    inpatient_encoded_all_cols=Input(rid="ri.foundry.main.dataset.5d31d8ed-ed3e-4304-96f7-9cc2554ed092")
 )
-def data_by_site(inpatient_encoded):
+def data_by_site_all_cols( inpatient_encoded_all_cols):
     df = inpatient_encoded
     sites_with_values = df.groupby('data_partner_id').count()
     return sites_with_values.reset_index()
@@ -55,7 +55,7 @@ def inpatient_encoded(inpatient_ml_dataset):
     df['visit_end'] = pd.to_datetime(df.visit_end_date).astype('int64')
     df = df.drop(columns=['visit_start_date', 'visit_end_date'])
     
-    df = pd.concat([df.drop('gender_concept_name', axis=1), pd.get_dummies(df.gender_concept_name, prefix='gender')], axis=1)
+    df = pd.concat([df.drop('gender_concept_name', axis=1), pd.get_dummies(df.gender_concept_name, prefix='gender', drop_first=True)], axis=1)
     df = pd.concat([df.drop('race', axis=1), pd.get_dummies(df.race, prefix='race', drop_first=True)], axis=1)
     df = pd.concat([df.drop('ethnicity', axis=1), pd.get_dummies(df.ethnicity, prefix='ethnicity', drop_first=True)], axis=1)
     df = pd.concat([df.drop('smoking_status', axis=1), pd.get_dummies(df.smoking_status, prefix='smoking', drop_first=True)], axis=1)
@@ -341,4 +341,11 @@ plt.title(‘measurement concept UMAP projection’, fontsize=20)
 plt.show()
 return
 
+
+@transform_pandas(
+    Output(rid="ri.vector.main.execute.828f9fea-f20a-41d2-bcf6-fdbb49ccfc94"),
+    inpatient_encoded=Input(rid="ri.foundry.main.dataset.cef3c32e-767c-4f6a-b669-3920dac46a10")
+)
+def unnamed(inpatient_encoded):
+    
 
