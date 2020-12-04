@@ -122,7 +122,23 @@ def inpatient_encoded_spark(inpatient_encoded):
     inpatient_encoded=Input(rid="ri.foundry.main.dataset.cef3c32e-767c-4f6a-b669-3920dac46a10")
 )
 def inpatient_encoded_w_imputation(inpatient_encoded):
+    df = inpatient_encoded
+
+    df['bnp_pg_ml'] = df['bnp_pg_ml'].fillna(100)
+    df['c-reactive_protein_crp_mg_l'] = df['c-reactive_protein_crp_mg_l'].fillna(10)
+    df['erythrocyte_sed_rate_mm_hr'] = df['erythrocyte_sed_rate_mm_hr'].fillna(19)
+    df['lactate_mg_dl'] = df['lactate_mg_dl'].fillna(13.5)
+    df['nt_pro_bnp_pg_ml'] = df['nt_pro_bnp_pg_ml'].fillna(125)
+    df['procalcitonin_ng_ml'] = df['procalcitonin_ng_ml'].fillna(0.02)
+    df['troponin_all_types_ng_ml'] = df['troponin_all_types_ng_ml'].fillna(0.02)
+
+    df.loc[(df.gender_male == True) & (df.ferritin_ng_ml.isna()), 'ferritin_ng_ml'] = 150
+    df.loc[(df.gender_male == False) & (df.gender_no_matching_concept == False) & (df.ferritin_ng_ml.isna()), 'ferritin_ng_ml'] = 75
     
+    # now fill the rest with the median
+    df.fillna(df.median())
+
+    return df
 
 @transform_pandas(
     Output(rid="ri.foundry.main.dataset.f410db35-59e0-4b82-8fa8-d6dc6a61c9f2"),
