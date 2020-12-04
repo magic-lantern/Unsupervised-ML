@@ -211,7 +211,7 @@ def outcomes(inpatient_ml_dataset):
                    'aki_in_hospital',
                    'invasive_ventilation',
                    'bad_outcome')
-    return df
+    return df.toPandas()
 
 @transform_pandas(
     Output(rid="ri.foundry.main.dataset.e6967b18-d64f-4539-9a9f-7ae3a5eef700"),
@@ -376,9 +376,10 @@ def pca_explained_variance( inpatient_scaled_w_imputation):
 
 @transform_pandas(
     Output(rid="ri.vector.main.execute.727dca65-eb02-41a3-b741-343d7b848573"),
-    inpatient_scaled_w_imputation=Input(rid="ri.foundry.main.dataset.f410db35-59e0-4b82-8fa8-d6dc6a61c9f2")
+    inpatient_scaled_w_imputation=Input(rid="ri.foundry.main.dataset.f410db35-59e0-4b82-8fa8-d6dc6a61c9f2"),
+    outcomes=Input(rid="ri.foundry.main.dataset.3d9b1654-3923-484f-8db5-6b38b56e290c")
 )
-def umap_analysis( inpatient_scaled_w_imputation):
+def umap_analysis( inpatient_scaled_w_imputation, outcomes):
     df = inpatient_scaled_w_imputation
     # try with just a few variables from the PCA analysis
     #df = df[['q_score', 'systolic_blood_pressure', 'visit_end', 'renal', 'respiratory_rate', 'visit_start', 'dmcx', 'negative_covid_test', 'negative_covid_test', 'dm', 'diastolic_blood_pressure', 'suspected_covid', 'chf', 'lactate_mg_dl', 'testcount']]
@@ -388,19 +389,24 @@ def umap_analysis( inpatient_scaled_w_imputation):
     df = df.drop(columns='bad_outcome')
     scaled_arr = df.values
 
-    reducer = umap.UMAP(low_memory=True, random_state=42)
+    reducer = umap.UMAP(random_state=42)
     reducer.fit(scaled_arr)
     embedding = reducer.transform(scaled_arr)
 
     #embedding = reducer.fit_transform(scaled_arr)
+    #print(embedding.shape)
+    #plt.scatter(embedding[:, 0],embedding[:, 1], c = prediction, alpha=0.6)
+    #plt.gca().set_aspect('equal', 'datalim')
+    #plt.title('UMAP projection', fontsize=20)
+    #plt.show()
 
-    print(embedding.shape)
-
-    plt.scatter(embedding[:, 0],embedding[:, 1], c = prediction, alpha=0.6)
-
-    plt.gca().set_aspect('equal', 'datalim')
-    plt.title('UMAP projection', fontsize=20)
+    splt = sns.scatterplot(x = embedding[:, 0],
+                            y = embedding[:, 1],
+                            hue = prediction,
+                            alpha = 0.6)
+    plt.title('UMAP 2D scatter plot')
     plt.show()
+
     return
 
 
