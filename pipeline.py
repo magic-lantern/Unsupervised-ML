@@ -411,7 +411,7 @@ def umap3d_embedding(inpatient_scaled_w_imputation):
 def umap_analysis( outcomes, umap2d_embedding):
     embedding = umap2d_embedding.values
     dfo = outcomes
-
+    dfo['data_partner_id'] = dfo.data_partner_id.astype('category')
     #embedding = reducer.fit_transform(scaled_arr)
     #print(embedding.shape)
     #plt.scatter(embedding[:, 0],embedding[:, 1], c = prediction, alpha=0.6)
