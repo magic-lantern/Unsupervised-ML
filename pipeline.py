@@ -381,12 +381,11 @@ def pca_explained_variance( inpatient_scaled_w_imputation):
 )
 def umap_analysis( inpatient_scaled_w_imputation, outcomes):
     df = inpatient_scaled_w_imputation
-    # try with just a few variables from the PCA analysis
-    #df = df[['q_score', 'systolic_blood_pressure', 'visit_end', 'renal', 'respiratory_rate', 'visit_start', 'dmcx', 'negative_covid_test', 'negative_covid_test', 'dm', 'diastolic_blood_pressure', 'suspected_covid', 'chf', 'lactate_mg_dl', 'testcount']]
-    #df = df.sample(frac=0.2)
-    prediction = df.bad_outcome
-    # take out prediction column
-    df = df.drop(columns='bad_outcome')
+    dfo = outcomes
+    prediction = dfo.bad_outcome
+    # take out visit_occurrence_id column
+    df = df.drop(columns='visit_occurrence_id')
+    
     scaled_arr = df.values
 
     reducer = umap.UMAP(random_state=42)
