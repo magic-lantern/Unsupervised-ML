@@ -351,3 +351,10 @@ plt.show()
 return
 
 
+@transform_pandas(
+    Output(rid="ri.vector.main.execute.de8f1180-78f8-4f66-8606-4cdeeaacda92"),
+    inpatient_encoded_all_cols=Input(rid="ri.foundry.main.dataset.5d31d8ed-ed3e-4304-96f7-9cc2554ed092")
+)
+def unnamed(inpatient_encoded_all_cols):
+    
+
