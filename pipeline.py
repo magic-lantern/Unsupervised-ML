@@ -421,7 +421,7 @@ def umap_analysis( outcomes, umap2d_embedding):
 
     splt = sns.scatterplot(x = embedding[:, 0],
                             y = embedding[:, 1],
-                            hue = dfo.data_partner_id,
+                            hue = dfo.severity_type,
                             alpha = 0.6)
     plt.title('UMAP 2D scatter plot')
     plt.show()
