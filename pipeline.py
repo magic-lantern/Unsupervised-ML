@@ -44,6 +44,9 @@ def inpatient_encoded(inpatient_ml_dataset):
     sdf = sdf.drop('in_death_table')
     sdf = sdf.drop('severity_type')
     sdf = sdf.drop('length_of_stay')
+    sdf = sdf.drop('ecmo')
+    sdf = sdf.drop('aki_in_hospital')
+    sdf = sdf.drop('invasive_ventilation')
 
     df = sdf.toPandas()
 
