@@ -456,7 +456,7 @@ def umap3d_viz_severity_type(umap3d_embedding, outcomes):
                         y=embedding[:, 1],
                         z=embedding[:, 2],
                         color=dfo.severity_type,
-                        opacity=0.3
+                        opacity=0.3,
                         title="UMAP 3D by Severity Type")
     fig.show()
     
