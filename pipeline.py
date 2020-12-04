@@ -118,6 +118,13 @@ def inpatient_encoded_spark(inpatient_encoded):
     return spark.createDataFrame(inpatient_encoded)
 
 @transform_pandas(
+    Output(rid="ri.foundry.main.dataset.d3578a81-014a-49a6-9887-53d296155bdd"),
+    inpatient_encoded=Input(rid="ri.foundry.main.dataset.cef3c32e-767c-4f6a-b669-3920dac46a10")
+)
+def inpatient_encoded_w_imputation(inpatient_encoded):
+    
+
+@transform_pandas(
     Output(rid="ri.foundry.main.dataset.f410db35-59e0-4b82-8fa8-d6dc6a61c9f2"),
     inpatient_encoded=Input(rid="ri.foundry.main.dataset.cef3c32e-767c-4f6a-b669-3920dac46a10")
 )
@@ -357,9 +364,9 @@ def umap_analysis( inpatient_scaled_w_imputation):
 
 
 @transform_pandas(
-    Output(rid="ri.vector.main.execute.39c3a72e-fc12-459a-a6ef-41fdfbcc9042"),
-    inpatient_encoded=Input(rid="ri.foundry.main.dataset.cef3c32e-767c-4f6a-b669-3920dac46a10")
+    Output(rid="ri.vector.main.execute.39acfe00-7dab-404c-ad82-9ebb9de02cc8"),
+    inpatient_ml_dataset=Input(rid="ri.foundry.main.dataset.07927bca-b175-4775-9c55-a371af481cc1")
 )
-def unnamed(inpatient_encoded):
+def unnamed(inpatient_ml_dataset):
     
 
