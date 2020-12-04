@@ -185,45 +185,6 @@ def pca_2_comp_analysis( inpatient_scaled_w_imputation):
     return spark.createDataFrame(pd.DataFrame(pca_2.components_, columns=df.columns,index = ['PC-1','PC-2']).reset_index())
 
 @transform_pandas(
-    Output(rid="ri.vector.main.execute.ddf9fe9f-f93d-4762-827e-3cf99e04d025"),
-    inpatient_scaled_w_imputation=Input(rid="ri.foundry.main.dataset.f410db35-59e0-4b82-8fa8-d6dc6a61c9f2")
-)
-def pca_2b_comp_analysis(inpatient_scaled_w_imputation):
-    # decent PCA guide available here: https://towardsdatascience.com/principal-component-analysis-pca-with-scikit-learn-1e84a0c731b0
-    df = inpatient_scaled_w_imputation
-    prediction = df.bad_outcome
-    # take out prediction column
-    df = df.drop(columns='bad_outcome')
-    scaled_arr = df.values
-
-    #start with all variables for PCA
-    my_pca = PCA(n_components=scaled_arr.shape[1], random_state=42)
-    my_pca.fit(scaled_arr)
-    pca_arr = my_pca.transform(scaled_arr)
-
-    # now the top 3 viewed with outcome
-    pca_2 = PCA(n_components=2, random_state=42)
-    pca_2.fit(scaled_arr)
-    pca_2_arr = pca_2.transform(scaled_arr)
-
-    fig = plt.figure(figsize = (12, 8))
-
-    splt = sns.scatterplot(x = pca_2_arr[:, 0],
-                            y = pca_2_arr[:, 1],
-                            s = 100,
-                            hue = prediction,
-                            alpha = 0.6)
-
-    plt.xlabel('First principal component')
-    plt.ylabel('Second principal component')
-    mytitle = 'PCA 2D scatter plot - ' + str(round(np.cumsum(my_pca.explained_variance_ratio_ * 100)[1])) + '% of variance captured'
-    plt.title(mytitle)
-    plt.show()
-
-    # see https://stackoverflow.com/questions/22984335/recovering-features-names-of-explained-variance-ratio-in-pca-with-sklearn
-    return spark.createDataFrame(pd.DataFrame(pca_2.components_, columns=df.columns,index = ['PC-1','PC-2']).reset_index())
-
-@transform_pandas(
     Output(rid="ri.foundry.main.dataset.a230c6e9-ece6-46e0-89aa-c9414533899f"),
     inpatient_scaled_w_imputation=Input(rid="ri.foundry.main.dataset.f410db35-59e0-4b82-8fa8-d6dc6a61c9f2")
 )
