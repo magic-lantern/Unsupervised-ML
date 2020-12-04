@@ -147,16 +147,15 @@ def inpatient_encoded_w_imputation(inpatient_encoded):
 def inpatient_scaled_w_imputation( inpatient_encoded_w_imputation):
     df = inpatient_encoded_w_imputation
     
-    # these columns should not be scaled
-    pass_through_cols = ['visit_id', 'bad_outcome']
-    prediction = df.bad_outcome
-    df = df.drop(columns=pass_through_cols)
+    # this columns should not be centered/scaled
+    visit_concept_id = df['visit_concept_id']
+    df = df.drop(columns='visit_concept_id')
 
     scaler = StandardScaler()
-    scaler.fit(filled_df)
+    scaler.fit(df)
 
-    ret_df = pd.DataFrame(scaler.transform(filled_df), columns=filled_df.columns)
-    ret_df['bad_outcome'] = prediction
+    ret_df = pd.DataFrame(scaler.transform(df), columns=df.columns)
+    ret_df['visit_concept_id'] = visit_concept_id
     return ret_df
     
 
@@ -213,9 +212,9 @@ def outcomes(inpatient_ml_dataset):
 )
 def pca3_ranked_features( inpatient_scaled_w_imputation):
     df = inpatient_scaled_w_imputation
-    prediction = df.bad_outcome
-    # take out prediction column
-    df = df.drop(columns='bad_outcome')
+    
+    # take out visit_concept_id column
+    df = df.drop(columns='visit_concept_id')
     scaled_arr = df.values
 
     # now the top 3 viewed with outcome
@@ -288,9 +287,9 @@ def pca_2_comp_analysis( inpatient_scaled_w_imputation):
 def pca_3_comp_analysis( inpatient_scaled_w_imputation):
     # decent PCA guide available here: https://towardsdatascience.com/principal-component-analysis-pca-with-scikit-learn-1e84a0c731b0
     df = inpatient_scaled_w_imputation
-    prediction = df.bad_outcome
-    # take out prediction column
-    df = df.drop(columns='bad_outcome')
+    visit_concept_id = df.visit_concept_id
+    # take out visit_concept_id column
+    df = df.drop(columns='visit_concept_id')
     scaled_arr = df.values
 
     #start with all variables for PCA
@@ -333,9 +332,9 @@ def pca_3_comp_analysis( inpatient_scaled_w_imputation):
 def pca_3_dataset(inpatient_scaled_w_imputation):
     # decent PCA guide available here: https://towardsdatascience.com/principal-component-analysis-pca-with-scikit-learn-1e84a0c731b0
     df = inpatient_scaled_w_imputation
-    prediction = df.bad_outcome
-    # take out prediction column
-    df = df.drop(columns='bad_outcome')
+    
+    # take out visit_concept_id column
+    df = df.drop(columns='visit_concept_id')
     scaled_arr = df.values
 
     # now the top 3 viewed with outcome
@@ -351,9 +350,9 @@ def pca_3_dataset(inpatient_scaled_w_imputation):
 )
 def pca_explained_variance( inpatient_scaled_w_imputation):
     df = inpatient_scaled_w_imputation
-    prediction = df.bad_outcome
-    # take out prediction column
-    df = df.drop(columns='bad_outcome')
+    
+    # take out visit_concept_id column
+    df = df.drop(columns='visit_concept_id')
     scaled_arr = df.values
 
     #start with all variables for PCA
