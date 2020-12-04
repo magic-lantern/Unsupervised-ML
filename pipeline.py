@@ -44,7 +44,6 @@ def inpatient_encoded(inpatient_ml_dataset):
     sdf = sdf.drop('in_death_table')
     sdf = sdf.drop('severity_type')
     sdf = sdf.drop('length_of_stay')
-    sdf = sdf.drop('covid_status_name')
 
     df = sdf.toPandas()
 
@@ -59,6 +58,38 @@ def inpatient_encoded(inpatient_ml_dataset):
     df = pd.concat([df.drop('smoking_status', axis=1), pd.get_dummies(df.smoking_status, prefix='smoking', drop_first=True)], axis=1)
     df = pd.concat([df.drop('blood_type', axis=1), pd.get_dummies(df.blood_type, prefix='blood_type', drop_first=True)], axis=1)
     #df = pd.concat([df.drop('severity_type', axis=1), pd.get_dummies(df.severity_type, prefix='severity', drop_first=True)], axis=1)
+
+    df.columns = df.columns.str.replace(' ', '_')
+    df.columns = df.columns.str.replace('/', '_')
+    df.columns = df.columns.str.lower()
+    
+    return df
+    
+
+@transform_pandas(
+    Output(rid="ri.foundry.main.dataset.5d31d8ed-ed3e-4304-96f7-9cc2554ed092"),
+    inpatient_ml_dataset=Input(rid="ri.foundry.main.dataset.07927bca-b175-4775-9c55-a371af481cc1")
+)
+def inpatient_encoded_all_cols(inpatient_ml_dataset):
+    def inpatient_encoded(inpatient_ml_dataset):
+    # get rid of ids, columns that are duplicates of other information,
+    # or columns that are from the end of stay
+    sdf = inpatient_ml_dataset
+
+    df = sdf.toPandas()
+
+    # fixing columns so they work with sklearn
+    df['visit_start'] = pd.to_datetime(df.visit_start_date).astype('int64')
+    df['visit_end'] = pd.to_datetime(df.visit_end_date).astype('int64')
+    df = df.drop(columns=['visit_start_date', 'visit_end_date'])
+    
+    df = pd.concat([df.drop('covid_status_name', axis=1), pd.get_dummies(df.covid_status_name, prefix='cov_status')], axis=1)
+    df = pd.concat([df.drop('gender_concept_name', axis=1), pd.get_dummies(df.gender_concept_name, prefix='gender')], axis=1)
+    df = pd.concat([df.drop('race', axis=1), pd.get_dummies(df.race, prefix='race', drop_first=True)], axis=1)
+    df = pd.concat([df.drop('ethnicity', axis=1), pd.get_dummies(df.ethnicity, prefix='ethnicity', drop_first=True)], axis=1)
+    df = pd.concat([df.drop('smoking_status', axis=1), pd.get_dummies(df.smoking_status, prefix='smoking', drop_first=True)], axis=1)
+    df = pd.concat([df.drop('blood_type', axis=1), pd.get_dummies(df.blood_type, prefix='blood_type', drop_first=True)], axis=1)
+    df = pd.concat([df.drop('severity_type', axis=1), pd.get_dummies(df.severity_type, prefix='severity', drop_first=True)], axis=1)
 
     df.columns = df.columns.str.replace(' ', '_')
     df.columns = df.columns.str.replace('/', '_')
@@ -310,11 +341,4 @@ plt.title(‘measurement concept UMAP projection’, fontsize=20)
 plt.show()
 return
 
-
-@transform_pandas(
-    Output(rid="ri.vector.main.execute.3ae66653-30d8-4692-9da4-e161b2ca9d3e"),
-    inpatient_ml_dataset=Input(rid="ri.foundry.main.dataset.07927bca-b175-4775-9c55-a371af481cc1")
-)
-def unnamed(inpatient_ml_dataset):
-    
 
