@@ -322,9 +322,9 @@ def pca_explained_variance( inpatient_scaled_w_imputation):
     scaled_arr = df.values
 
     #start with all variables for PCA
-    my_pca = PCA(n_components=scaled_df.shape[1], random_state=42)
-    my_pca.fit(scaled_df)
-    pca_arr = my_pca.transform(scaled_df)
+    my_pca = PCA(n_components=scaled_arr.shape[1], random_state=42)
+    my_pca.fit(scaled_arr)
+    pca_arr = my_pca.transform(scaled_arr)
 
     plt.plot(np.cumsum(my_pca.explained_variance_ratio_))
     plt.xlabel('Number of components')
