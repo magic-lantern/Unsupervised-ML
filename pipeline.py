@@ -67,6 +67,7 @@ def inpatient_encoded(inpatient_ml_dataset):
     df['visit_end'] = pd.to_datetime(df.visit_end_date).astype('int64')
     df = df.drop(columns=['visit_start_date', 'visit_end_date'])
     
+    df = pd.concat([df.drop('data_partner_id', axis=1), pd.get_dummies(df.data_partner_id, prefix='site', drop_first=True)], axis=1)
     df = pd.concat([df.drop('gender_concept_name', axis=1), pd.get_dummies(df.gender_concept_name, prefix='gender', drop_first=True)], axis=1)
     df = pd.concat([df.drop('race', axis=1), pd.get_dummies(df.race, prefix='race', drop_first=True)], axis=1)
     df = pd.concat([df.drop('ethnicity', axis=1), pd.get_dummies(df.ethnicity, prefix='ethnicity', drop_first=True)], axis=1)
