@@ -249,14 +249,16 @@ def pca3_ranked_features( inpatient_scaled_w_imputation):
 
 @transform_pandas(
     Output(rid="ri.foundry.main.dataset.e60a9fc6-c946-4707-a1a0-bea11453ad48"),
-    inpatient_scaled_w_imputation=Input(rid="ri.foundry.main.dataset.f410db35-59e0-4b82-8fa8-d6dc6a61c9f2")
+    inpatient_scaled_w_imputation=Input(rid="ri.foundry.main.dataset.f410db35-59e0-4b82-8fa8-d6dc6a61c9f2"),
+    outcomes=Input(rid="ri.foundry.main.dataset.3d9b1654-3923-484f-8db5-6b38b56e290c")
 )
-def pca_2_comp_analysis( inpatient_scaled_w_imputation):
+def pca_2_comp_analysis( inpatient_scaled_w_imputation, outcomes):
     # decent PCA guide available here: https://towardsdatascience.com/principal-component-analysis-pca-with-scikit-learn-1e84a0c731b0
     df = inpatient_scaled_w_imputation
-    prediction = df.bad_outcome
-    # take out prediction column
-    df = df.drop(columns='bad_outcome')
+    dfo = outcomes.toPandas()
+    prediction = dfo.bad_outcome
+    # take out visit_occurrence_id column
+    df = df.drop(columns='visit_occurrence_id')
     scaled_arr = df.values
 
     #start with all variables for PCA
