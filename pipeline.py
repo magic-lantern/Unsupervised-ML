@@ -289,11 +289,13 @@ def pca_2_comp_analysis( inpatient_scaled_w_imputation):
 
 @transform_pandas(
     Output(rid="ri.foundry.main.dataset.a230c6e9-ece6-46e0-89aa-c9414533899f"),
-    inpatient_scaled_w_imputation=Input(rid="ri.foundry.main.dataset.f410db35-59e0-4b82-8fa8-d6dc6a61c9f2")
+    inpatient_scaled_w_imputation=Input(rid="ri.foundry.main.dataset.f410db35-59e0-4b82-8fa8-d6dc6a61c9f2"),
+    outcomes=Input(rid="ri.foundry.main.dataset.3d9b1654-3923-484f-8db5-6b38b56e290c")
 )
-def pca_3_comp_analysis( inpatient_scaled_w_imputation):
+def pca_3_comp_analysis( inpatient_scaled_w_imputation, outcomes):
     # decent PCA guide available here: https://towardsdatascience.com/principal-component-analysis-pca-with-scikit-learn-1e84a0c731b0
     df = inpatient_scaled_w_imputation
+    dfo = outcomes.toPandas()
     visit_concept_id = df.visit_concept_id
     # take out visit_concept_id column
     df = df.drop(columns='visit_concept_id')
@@ -316,7 +318,7 @@ def pca_3_comp_analysis( inpatient_scaled_w_imputation):
         pca_3_arr[:, 0],
         pca_3_arr[:, 1],
         pca_3_arr[:, 2],
-        c = prediction,
+        c = dfo['bad_outcome'],
         s=50,
         alpha=0.6)
 
