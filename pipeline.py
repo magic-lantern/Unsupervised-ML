@@ -88,15 +88,20 @@ def inpatient_encoded_spark(inpatient_encoded):
 )
 def inpatient_scaled_w_imputation(inpatient_encoded):
     df = inpatient_encoded
-    
+
+    prediction = df.bad_outcome
+    filled_df = df.drop(columns='bad_outcome')
+
     # this is bad, but just fill all nulls with median
     # try mo'bettah imputation later
-    filled_df = df.fillna(df.median())
+    filled_df = filled_df.fillna(filled_df.median())
 
     scaler = StandardScaler()
     scaler.fit(filled_df)
 
-    return pd.DataFrame(scaler.transform(filled_df), columns=filled_df.columns)
+    ret_df = pd.DataFrame(scaler.transform(filled_df), columns=filled_df.columns)
+    ret_df['bad_outcome'] = prediction
+    return ret_df
     
 
 @transform_pandas(
