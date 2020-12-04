@@ -147,15 +147,15 @@ def inpatient_encoded_w_imputation(inpatient_encoded):
 def inpatient_scaled_w_imputation( inpatient_encoded_w_imputation):
     df = inpatient_encoded_w_imputation
     
-    # this columns should not be centered/scaled
-    visit_concept_id = df['visit_concept_id']
-    df = df.drop(columns='visit_concept_id')
+    # this column should not be centered/scaled
+    visit_occurrence_id = df['visit_occurrence_id']
+    df = df.drop(columns='visit_occurrence_id')
 
     scaler = StandardScaler()
     scaler.fit(df)
 
     ret_df = pd.DataFrame(scaler.transform(df), columns=df.columns)
-    ret_df['visit_concept_id'] = visit_concept_id
+    ret_df['visit_occurrence_id'] = visit_occurrence_id
     return ret_df
     
 
