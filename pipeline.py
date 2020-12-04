@@ -357,36 +357,3 @@ def umap_analysis( inpatient_scaled_w_imputation):
     return
 
 
-@transform_pandas(
-    Output(rid="ri.vector.main.execute.a53f2f5b-ec20-4c6a-be2a-131b2aa6c650"),
-    inpatient_scaled_w_imputation=Input(rid="ri.foundry.main.dataset.f410db35-59e0-4b82-8fa8-d6dc6a61c9f2")
-)
-def umap_smaller(inpatient_scaled_w_imputation):
-    df = inpatient_scaled_w_imputation
-    # try with just a few variables from the PCA analysis
-    #df = df[['q_score', 'systolic_blood_pressure', 'visit_end', 'renal', 'respiratory_rate', 'visit_start', 'dmcx', 'negative_covid_test', 'negative_covid_test', 'dm', 'diastolic_blood_pressure', 'suspected_covid', 'chf', 'lactate_mg_dl', 'testcount']]
-    df = df.sample(frac=0.2)
-    prediction = df.bad_outcome
-    # take out prediction column
-    df = df.drop(columns='bad_outcome')
-    scaled_arr = df.values
-
-    reducer = umap.UMAP(low_memory=True, random_state=42)
-    reducer.fit(scaled_arr)
-    embedding = reducer.transform(scaled_arr)
-
-    #embedding = reducer.fit_transform(scaled_arr)
-
-    print(embedding.shape)
-
-    plt.scatter(embedding[:, 0],
-        embedding[:, 1],
-        c = prediction,
-        alpha=0.6)
-
-    plt.gca().set_aspect('equal', 'datalim')
-    plt.title('UMAP projection', fontsize=20)
-    plt.show()
-    return
-
-
