@@ -318,7 +318,7 @@ def pca_3_comp_analysis( inpatient_scaled_w_imputation, outcomes):
         pca_3_arr[:, 0],
         pca_3_arr[:, 1],
         pca_3_arr[:, 2],
-        c = dfo['severity_type'],
+        c = dfo['length_of_stay'],
         s=50,
         alpha=0.6)
 
