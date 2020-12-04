@@ -55,6 +55,7 @@ def inpatient_encoded(inpatient_ml_dataset):
     sdf = sdf.drop('ecmo')
     sdf = sdf.drop('aki_in_hospital')
     sdf = sdf.drop('invasive_ventilation')
+    sdf = sdf.drop('bad_outcome')
 
     # these columns are 90% or greater NULL
     sdf = sdf.drop('miscellaneous_program', 'department_of_corrections', 'department_of_defense', 'other_government_federal_state_local_excluding_department_of_corrections', 'no_payment_from_an_organization_agency_program_private_payer_listed', 'medicaid', 'private_health_insurance')
@@ -145,9 +146,11 @@ def inpatient_encoded_w_imputation(inpatient_encoded):
 )
 def inpatient_scaled_w_imputation( inpatient_encoded_w_imputation):
     df = inpatient_encoded_w_imputation
-
+    
+    # these columns should not be scaled
+    pass_through_cols = ['visit_id', 'bad_outcome']
     prediction = df.bad_outcome
-    df = df.drop(columns='bad_outcome')
+    df = df.drop(columns=pass_through_cols)
 
     scaler = StandardScaler()
     scaler.fit(filled_df)
