@@ -120,27 +120,21 @@ def missing_data_info(inpatient_encoded):
 
 @transform_pandas(
     Output(rid="ri.foundry.main.dataset.e6967b18-d64f-4539-9a9f-7ae3a5eef700"),
-    inpatient_encoded=Input(rid="ri.foundry.main.dataset.cef3c32e-767c-4f6a-b669-3920dac46a10")
+    inpatient_scaled_w_imputation=Input(rid="ri.foundry.main.dataset.f410db35-59e0-4b82-8fa8-d6dc6a61c9f2")
 )
-def pca3_ranked_features(inpatient_encoded):
-    df = inpatient_encoded
-    prediction = df.bad_outcome
-    # take out prediction column
-    df = df.drop(columns='bad_outcome')
-    scaler = preprocessing.StandardScaler()
-
-    # this is bad, but just fill all nulls with median
-    filled_df = df.fillna(df.median())
-
-    scaler.fit(filled_df)
-    scaled_df = scaler.transform(filled_df)
+def pca3_ranked_features( inpatient_scaled_w_imputation):
+        df = inpatient_scaled_w_imputation
+        prediction = df.bad_outcome
+        # take out prediction column
+        df = df.drop(columns='bad_outcome')
+        scaled_arr = df.values
 
     # now the top 3 viewed with outcome
     pca_3 = PCA(n_components=3, random_state=42)
     pca_3.fit(scaled_df)
     pca_3_arr = pca_3.transform(scaled_df)
 
-    pca_df = pd.DataFrame(pca_3.components_, columns=filled_df.columns,index = ['PC-1','PC-2', 'PC-3'])
+    pca_df = pd.DataFrame(pca_3.components_, columns=df.columns,index = ['PC-1','PC-2', 'PC-3'])
     pt = pca_df.transpose().abs()
     pc1_df = pt.sort_values('PC-1', ascending=False).drop(['PC-2', 'PC-3'], axis=1)
     pc1_df = pc1_df.reset_index()
