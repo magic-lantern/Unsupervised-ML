@@ -356,3 +356,10 @@ def umap_analysis( inpatient_scaled_w_imputation):
     return
 
 
+@transform_pandas(
+    Output(rid="ri.vector.main.execute.39c3a72e-fc12-459a-a6ef-41fdfbcc9042"),
+    inpatient_encoded=Input(rid="ri.foundry.main.dataset.cef3c32e-767c-4f6a-b669-3920dac46a10")
+)
+def unnamed(inpatient_encoded):
+    
+
