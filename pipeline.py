@@ -286,34 +286,20 @@ def pca_3_comp_analysis( inpatient_scaled_w_imputation):
 
 @transform_pandas(
     Output(rid="ri.foundry.main.dataset.78eb8376-28de-4705-b6b1-d5d2cf520b45"),
-    inpatient_encoded=Input(rid="ri.foundry.main.dataset.cef3c32e-767c-4f6a-b669-3920dac46a10")
+    inpatient_scaled_w_imputation=Input(rid="ri.foundry.main.dataset.f410db35-59e0-4b82-8fa8-d6dc6a61c9f2")
 )
-def pca_3_dataset(inpatient_encoded):
+def pca_3_dataset(inpatient_scaled_w_imputation):
     # decent PCA guide available here: https://towardsdatascience.com/principal-component-analysis-pca-with-scikit-learn-1e84a0c731b0
-    df = inpatient_encoded
+    df = inpatient_scaled_w_imputation
     prediction = df.bad_outcome
     # take out prediction column
     df = df.drop(columns='bad_outcome')
-    scaler = preprocessing.StandardScaler()
-
-    # smaller dataframe with just a few columns for testing purposes
-    # sdf = df[['data_partner_id', 'age_at_visit_start_in_years_int', 'length_of_stay', 'q_score', 'testcount', 'positive_covid_test', 'negative_covid_test', 'suspected_covid', 'in_death_table', 'ecmo', 'aki_in_hospital', 'invasive_ventilation']]
-
-    # this is bad, but just fill all nulls with median
-    filled_df = df.fillna(df.median())
-
-    scaler.fit(filled_df)
-    scaled_df = scaler.transform(filled_df)
-
-    #start with all variables for PCA
-    my_pca = PCA(n_components=scaled_df.shape[1], random_state=42)
-    my_pca.fit(scaled_df)
-    pca_arr = my_pca.transform(scaled_df)
+    scaled_arr = df.values
 
     # now the top 3 viewed with outcome
     pca_3 = PCA(n_components=3, random_state=42)
-    pca_3.fit(scaled_df)
-    pca_3_arr = pca_3.transform(scaled_df)
+    pca_3.fit(scaled_arr)
+    pca_3_arr = pca_3.transform(scaled_arr)
 
     return pd.DataFrame(pca_3_arr)
 
@@ -343,25 +329,25 @@ def pca_explained_variance( inpatient_scaled_w_imputation):
     inpatient_scaled_w_imputation=Input(rid="ri.foundry.main.dataset.f410db35-59e0-4b82-8fa8-d6dc6a61c9f2")
 )
 def umap_analysis( inpatient_scaled_w_imputation):
-df = inpatient_scaled_w_imputation
-df = df.sample(frac=0.33333)
-prediction = df.bad_outcome
-# take out prediction column
-df = df.drop(columns='bad_outcome')
-scaled_arr = df.values
+    df = inpatient_scaled_w_imputation
+    df = df.sample(frac=0.2)
+    prediction = df.bad_outcome
+    # take out prediction column
+    df = df.drop(columns='bad_outcome')
+    scaled_arr = df.values
 
-reducer = umap.UMAP(low_memory=True, random_state=42)
-reducer.fit(scaled_arr)
-embedding = reducer.transform(scaled_arr)
+    reducer = umap.UMAP(low_memory=True, random_state=42)
+    reducer.fit(scaled_arr)
+    embedding = reducer.transform(scaled_arr)
 
-embedding = reducer.fit_transform(scaled_arr)
+    #embedding = reducer.fit_transform(scaled_arr)
 
-print(embedding.shape)
+    #print(embedding.shape)
 
-plt.scatter(embedding[:, 0],embedding[:, 1])
-plt.gca().set_aspect(‘equal’, ‘datalim’)
-plt.title(‘measurement concept UMAP projection’, fontsize=20)
-plt.show()
+    #plt.scatter(embedding[:, 0],embedding[:, 1])
+    #plt.gca().set_aspect(‘equal’, ‘datalim’)
+    #plt.title(‘measurement concept UMAP projection’, fontsize=20)
+    #plt.show()
 return
 
 
