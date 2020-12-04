@@ -424,11 +424,11 @@ def umap3d_embedding(inpatient_scaled_w_imputation):
     return pd.DataFrame(embedding)
 
 @transform_pandas(
-    Output(rid="ri.foundry.main.dataset.4e12ebec-cf89-4018-813f-0ceefda14c1a"),
+    Output(rid="ri.foundry.main.dataset.58ae8bdf-979b-4847-ac9f-fdd4071c07ef"),
     outcomes=Input(rid="ri.foundry.main.dataset.3d9b1654-3923-484f-8db5-6b38b56e290c"),
     umap3d_embedding=Input(rid="ri.foundry.main.dataset.c135a77f-4b71-4df9-abfe-be348abfc6a8")
 )
-def umap3d_viz_severity_type(umap3d_embedding, outcomes):
+def umap3d_viz_bad_outcome(umap3d_embedding, outcomes):
     embedding = umap3d_embedding.values
     dfo = outcomes
     dfo['data_partner_id'] = dfo.data_partner_id.astype('category')
@@ -436,18 +436,18 @@ def umap3d_viz_severity_type(umap3d_embedding, outcomes):
     fig = px.scatter_3d(x=embedding[:, 0],
                         y=embedding[:, 1],
                         z=embedding[:, 2],
-                        color=dfo.severity_type,
-                        title="UMAP 3D by Severity Type")
+                        color=dfo.bad_outcome,
+                        title="UMAP 3D by Bad Outcome")
     fig.show()
     
     return
 
 @transform_pandas(
-    Output(rid="ri.vector.main.execute.c0710fa7-9890-47c9-a629-a3320dba4e6a"),
+    Output(rid="ri.foundry.main.dataset.4e12ebec-cf89-4018-813f-0ceefda14c1a"),
     outcomes=Input(rid="ri.foundry.main.dataset.3d9b1654-3923-484f-8db5-6b38b56e290c"),
     umap3d_embedding=Input(rid="ri.foundry.main.dataset.c135a77f-4b71-4df9-abfe-be348abfc6a8")
 )
-def umap3d_viz_severity_type_1(umap3d_embedding, outcomes):
+def umap3d_viz_severity_type(umap3d_embedding, outcomes):
     embedding = umap3d_embedding.values
     dfo = outcomes
     dfo['data_partner_id'] = dfo.data_partner_id.astype('category')
