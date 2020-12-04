@@ -155,9 +155,9 @@ def pca3_ranked_features( inpatient_scaled_w_imputation):
 
 @transform_pandas(
     Output(rid="ri.foundry.main.dataset.e60a9fc6-c946-4707-a1a0-bea11453ad48"),
-    inpatient_encoded=Input(rid="ri.foundry.main.dataset.cef3c32e-767c-4f6a-b669-3920dac46a10")
+    inpatient_scaled_w_imputation=Input(rid="ri.foundry.main.dataset.f410db35-59e0-4b82-8fa8-d6dc6a61c9f2")
 )
-def pca_2_comp_analysis(inpatient_encoded):
+def pca_2_comp_analysis( inpatient_scaled_w_imputation):
     # decent PCA guide available here: https://towardsdatascience.com/principal-component-analysis-pca-with-scikit-learn-1e84a0c731b0
     df = inpatient_scaled_w_imputation
     prediction = df.bad_outcome
