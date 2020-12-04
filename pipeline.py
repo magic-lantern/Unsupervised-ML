@@ -429,3 +429,10 @@ def umap_analysis( outcomes, umap2d_embedding):
     return
 
 
+@transform_pandas(
+    Output(rid="ri.vector.main.execute.73865070-1d47-4fd5-bd67-f510e1ebf959"),
+    umap3d_embedding=Input(rid="ri.foundry.main.dataset.c135a77f-4b71-4df9-abfe-be348abfc6a8")
+)
+def unnamed(umap3d_embedding):
+    
+
