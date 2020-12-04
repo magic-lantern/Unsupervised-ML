@@ -246,12 +246,12 @@ def pca_3_comp_analysis( inpatient_scaled_w_imputation):
     #start with all variables for PCA
     my_pca = PCA(n_components=scaled_df.shape[1], random_state=42)
     my_pca.fit(scaled_df)
-    pca_arr = my_pca.transform(scaled_df)
+    pca_arr = my_pca.transform(scaled_arr)
 
     # now the top 3 viewed with outcome
     pca_3 = PCA(n_components=3, random_state=42)
-    pca_3.fit(scaled_df)
-    pca_3_arr = pca_3.transform(scaled_df)
+    pca_3.fit(scaled_arr)
+    pca_3_arr = pca_3.transform(scaled_arr)
 
     fig = plt.figure(figsize = (12, 8))
     ax = plt.axes(projection="3d")
