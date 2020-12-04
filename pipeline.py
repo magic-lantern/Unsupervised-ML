@@ -74,11 +74,7 @@ def inpatient_encoded(inpatient_ml_dataset):
     inpatient_ml_dataset=Input(rid="ri.foundry.main.dataset.07927bca-b175-4775-9c55-a371af481cc1")
 )
 def inpatient_encoded_all_cols(inpatient_ml_dataset):
-    def inpatient_encoded(inpatient_ml_dataset):
-    # get rid of ids, columns that are duplicates of other information,
-    # or columns that are from the end of stay
     sdf = inpatient_ml_dataset
-
     df = sdf.toPandas()
 
     # fixing columns so they work with sklearn
@@ -86,8 +82,9 @@ def inpatient_encoded_all_cols(inpatient_ml_dataset):
     df['visit_end'] = pd.to_datetime(df.visit_end_date).astype('int64')
     df = df.drop(columns=['visit_start_date', 'visit_end_date'])
     
-    df = pd.concat([df.drop('covid_status_name', axis=1), pd.get_dummies(df.covid_status_name, prefix='cov_status')], axis=1)
-    df = pd.concat([df.drop('gender_concept_name', axis=1), pd.get_dummies(df.gender_concept_name, prefix='gender')], axis=1)
+    #dummy code these
+    df = pd.concat([df.drop('covid_status_name', axis=1), pd.get_dummies(df.covid_status_name, prefix='cov_status', drop_first=True)], axis=1)
+    df = pd.concat([df.drop('gender_concept_name', axis=1), pd.get_dummies(df.gender_concept_name, prefix='gender', drop_first=True)], axis=1)
     df = pd.concat([df.drop('race', axis=1), pd.get_dummies(df.race, prefix='race', drop_first=True)], axis=1)
     df = pd.concat([df.drop('ethnicity', axis=1), pd.get_dummies(df.ethnicity, prefix='ethnicity', drop_first=True)], axis=1)
     df = pd.concat([df.drop('smoking_status', axis=1), pd.get_dummies(df.smoking_status, prefix='smoking', drop_first=True)], axis=1)
