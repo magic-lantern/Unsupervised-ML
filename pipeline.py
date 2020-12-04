@@ -274,8 +274,7 @@ def pca_3_comp_analysis( inpatient_scaled_w_imputation):
         s=50,
         alpha=0.6)
 
-    legend1 = ax.legend(*splt.legend_elements(), title='bad_outcome')
-    ax.add_artist(legend1)
+    ax.legend(*splt.legend_elements(), title='bad_outcome')
 
     ax.set_xlabel('First principal component')
     ax.set_ylabel('Second principal component')
