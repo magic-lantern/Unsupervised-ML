@@ -430,7 +430,7 @@ def umap2d_viz_severity_type( outcomes, umap2d_embedding):
 
 
 @transform_pandas(
-    Output(rid="ri.vector.main.execute.17db7734-2d32-4646-a31b-f996063c83d8"),
+    Output(rid="ri.foundry.main.dataset.41b56b11-253f-4396-9ce9-71e381af695f"),
     outcomes=Input(rid="ri.foundry.main.dataset.3d9b1654-3923-484f-8db5-6b38b56e290c"),
     umap2d_embedding=Input(rid="ri.foundry.main.dataset.ba772263-cc7a-41ab-82a2-0203139bbbf4")
 )
