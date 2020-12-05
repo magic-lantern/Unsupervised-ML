@@ -383,7 +383,7 @@ def umap2d_embedding(inpatient_scaled_w_imputation):
     df = df.drop(columns='visit_occurrence_id')
     scaled_arr = df.values
 
-    reducer = umap.UMAP(random_state=42, n_neighbors=5)
+    reducer = umap.UMAP(random_state=42, n_neighbors=200)
     reducer.fit(scaled_arr)
     embedding = reducer.transform(scaled_arr)
     return pd.DataFrame(embedding)
