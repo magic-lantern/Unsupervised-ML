@@ -410,7 +410,7 @@ def umap2d_viz_bad_outcome( outcomes, umap2d_embedding):
 
 
 @transform_pandas(
-    Output(rid="ri.vector.main.execute.727dca65-eb02-41a3-b741-343d7b848573"),
+    Output(rid="ri.foundry.main.dataset.f9367601-0a80-489e-9958-4fd41a796713"),
     outcomes=Input(rid="ri.foundry.main.dataset.3d9b1654-3923-484f-8db5-6b38b56e290c"),
     umap2d_embedding=Input(rid="ri.foundry.main.dataset.ba772263-cc7a-41ab-82a2-0203139bbbf4")
 )
