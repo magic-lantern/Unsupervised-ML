@@ -266,7 +266,12 @@ def pca_2_comp_analysis( inpatient_scaled_w_imputation, outcomes):
     df = df.drop(columns='visit_occurrence_id')
     scaled_arr = df.values
 
-    # now the top 3 viewed with outcome
+    #start with all variables for PCA
+    my_pca = PCA(n_components=df.shape[1], random_state=42)
+    my_pca.fit(scaled_arr)
+    pca_arr = my_pca.transform(scaled_arr)
+
+    # now the top 2 viewed with outcome
     pca_2 = PCA(n_components=2, random_state=42)
     pca_2.fit(scaled_arr)
     pca_2_arr = pca_2.transform(scaled_arr)
