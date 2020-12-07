@@ -229,7 +229,7 @@ def pca3_ranked_features( inpatient_scaled_w_imputation):
     pca_3_arr = pca_3.transform(scaled_arr)
 
     pca_df = pd.DataFrame(pca_3.components_, columns=df.columns,index = ['PC-1','PC-2', 'PC-3'])
-    pt = pca_df.transpose().abs()
+    pt = pca_df.transpose()
     pc1_df = pt.sort_values('PC-1', ascending=False).drop(['PC-2', 'PC-3'], axis=1)
     pc1_df = pc1_df.reset_index()
     pc1_df = pc1_df.rename(columns = {'index':'pc-1-col', 'PC-1': 'pc-1-val'})
