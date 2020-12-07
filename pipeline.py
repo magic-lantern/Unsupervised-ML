@@ -56,6 +56,9 @@ def inpatient_encoded(inpatient_ml_dataset):
     sdf = sdf.drop('aki_in_hospital')
     sdf = sdf.drop('invasive_ventilation')
     sdf = sdf.drop('bad_outcome')
+    sdf = sdf.drop('positive_covid_test', 'negative_covid_test', 'suspected_covid')
+    # remove site so analysis is more generalized across all COVID positive
+    sdf = sdf.drop('data_partner_id')
 
     # these columns are 90% or greater NULL
     sdf = sdf.drop('miscellaneous_program', 'department_of_corrections', 'department_of_defense', 'other_government_federal_state_local_excluding_department_of_corrections', 'no_payment_from_an_organization_agency_program_private_payer_listed', 'medicaid', 'private_health_insurance')
@@ -67,7 +70,8 @@ def inpatient_encoded(inpatient_ml_dataset):
     df['visit_end'] = pd.to_datetime(df.visit_end_date).astype('int64')
     df = df.drop(columns=['visit_start_date', 'visit_end_date'])
     
-    df = pd.concat([df, pd.get_dummies(df.data_partner_id, prefix='site', drop_first=True)], axis=1)
+    # remove site so analysis is more generalized across all COVID positive
+    # df = pd.concat([df, pd.get_dummies(df.data_partner_id, prefix='site', drop_first=True)], axis=1)
     df = pd.concat([df.drop('gender_concept_name', axis=1), pd.get_dummies(df.gender_concept_name, prefix='gender', drop_first=True)], axis=1)
     df = pd.concat([df.drop('race', axis=1), pd.get_dummies(df.race, prefix='race', drop_first=True)], axis=1)
     df = pd.concat([df.drop('ethnicity', axis=1), pd.get_dummies(df.ethnicity, prefix='ethnicity', drop_first=True)], axis=1)
@@ -116,6 +120,7 @@ def inpatient_encoded_all_cols(inpatient_ml_dataset):
     inpatient_encoded=Input(rid="ri.foundry.main.dataset.cef3c32e-767c-4f6a-b669-3920dac46a10")
 )
 def inpatient_encoded_spark(inpatient_encoded):
+    inpatient_encoded = inpatient_encoded
     return spark.createDataFrame(inpatient_encoded)
 
 @transform_pandas(
