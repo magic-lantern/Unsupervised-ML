@@ -380,6 +380,21 @@ def pca_explained_variance( inpatient_scaled_w_imputation):
     plt.show()
 
 @transform_pandas(
+    Output(rid="ri.vector.main.execute.72a87fdf-8af8-4f58-863c-d3a1b04cb8a7"),
+    pca_all_dataset=Input(rid="ri.foundry.main.dataset.78eb8376-28de-4705-b6b1-d5d2cf520b45")
+)
+def pca_umap( pca_all_dataset):
+    df = pca_all_dataset
+    df = df.drop(columns='visit_occurrence_id')
+    scaled_arr = df.values
+
+    reducer = umap.UMAP(random_state=42, n_neighbors=500, local_connectivity=5)
+    reducer.fit(scaled_arr)
+    embedding = reducer.transform(scaled_arr)
+    return pd.DataFrame(embedding)
+
+
+@transform_pandas(
     Output(rid="ri.foundry.main.dataset.ba772263-cc7a-41ab-82a2-0203139bbbf4"),
     inpatient_scaled_w_imputation=Input(rid="ri.foundry.main.dataset.f410db35-59e0-4b82-8fa8-d6dc6a61c9f2")
 )
@@ -527,11 +542,4 @@ def umap3d_viz_site(umap3d_embedding, outcomes):
     fig.show()
     
     return
-
-@transform_pandas(
-    Output(rid="ri.vector.main.execute.72a87fdf-8af8-4f58-863c-d3a1b04cb8a7"),
-    pca_explained_variance=Input(rid="ri.foundry.main.dataset.ad26ec53-2c46-4d3c-9a78-c86c77accad7")
-)
-def unnamed(pca_explained_variance):
-    
 
