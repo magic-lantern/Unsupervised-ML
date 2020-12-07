@@ -380,15 +380,13 @@ def pca_explained_variance( inpatient_scaled_w_imputation):
     plt.show()
 
 @transform_pandas(
-    Output(rid="ri.vector.main.execute.72a87fdf-8af8-4f58-863c-d3a1b04cb8a7"),
+    Output(rid="ri.foundry.main.dataset.d2ff4c8e-fbe2-445d-9df2-356a3a70e4f6"),
     pca_all_dataset=Input(rid="ri.foundry.main.dataset.78eb8376-28de-4705-b6b1-d5d2cf520b45")
 )
-def pca_umap( pca_all_dataset):
-    df = pca_all_dataset
-    df = df.drop(columns='visit_occurrence_id')
-    scaled_arr = df.values
+def pca_umap_embedding( pca_all_dataset):
+    scaled_arr = pca_all_dataset
 
-    reducer = umap.UMAP(random_state=42, n_neighbors=500, local_connectivity=5)
+    reducer = umap.UMAP(random_state=42, n_neighbors=200, local_connectivity=5)
     reducer.fit(scaled_arr)
     embedding = reducer.transform(scaled_arr)
     return pd.DataFrame(embedding)
