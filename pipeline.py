@@ -128,6 +128,7 @@ def inpatient_encoded_spark(inpatient_encoded):
 )
 def inpatient_encoded_w_imputation(inpatient_encoded):
     df = inpatient_encoded
+    # remove data_partner_id as it was kept for viewing missing data by site. Not part of the rest of this analysis pipeline
     df = df.drop(columns='data_partner_id')
 
     df['bnp_pg_ml'] = df['bnp_pg_ml'].fillna(100)
@@ -342,7 +343,7 @@ def pca_3_comp_analysis( inpatient_scaled_w_imputation, outcomes):
     Output(rid="ri.foundry.main.dataset.78eb8376-28de-4705-b6b1-d5d2cf520b45"),
     inpatient_scaled_w_imputation=Input(rid="ri.foundry.main.dataset.f410db35-59e0-4b82-8fa8-d6dc6a61c9f2")
 )
-def pca_3_dataset(inpatient_scaled_w_imputation):
+def pca_all_dataset(inpatient_scaled_w_imputation):
     # decent PCA guide available here: https://towardsdatascience.com/principal-component-analysis-pca-with-scikit-learn-1e84a0c731b0
     df = inpatient_scaled_w_imputation
     
@@ -351,14 +352,14 @@ def pca_3_dataset(inpatient_scaled_w_imputation):
     scaled_arr = df.values
 
     # now the top 3 viewed with outcome
-    pca_3 = PCA(n_components=3, random_state=42)
-    pca_3.fit(scaled_arr)
-    pca_3_arr = pca_3.transform(scaled_arr)
+    pca_all = PCA(random_state=42)
+    pca_all.fit(scaled_arr)
+    pca_all_arr = pca_all.transform(scaled_arr)
 
-    return pd.DataFrame(pca_3_arr)
+    return pd.DataFrame(pca_all_arr)
 
 @transform_pandas(
-    Output(rid="ri.vector.main.execute.17ab7d1e-d4f3-4a5f-98a7-f63f5997c021"),
+    Output(rid="ri.foundry.main.dataset.ad26ec53-2c46-4d3c-9a78-c86c77accad7"),
     inpatient_scaled_w_imputation=Input(rid="ri.foundry.main.dataset.f410db35-59e0-4b82-8fa8-d6dc6a61c9f2")
 )
 def pca_explained_variance( inpatient_scaled_w_imputation):
