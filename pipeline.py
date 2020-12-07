@@ -528,3 +528,10 @@ def umap3d_viz_site(umap3d_embedding, outcomes):
     
     return
 
+@transform_pandas(
+    Output(rid="ri.vector.main.execute.72a87fdf-8af8-4f58-863c-d3a1b04cb8a7"),
+    pca_explained_variance=Input(rid="ri.foundry.main.dataset.ad26ec53-2c46-4d3c-9a78-c86c77accad7")
+)
+def unnamed(pca_explained_variance):
+    
+
