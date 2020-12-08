@@ -409,11 +409,11 @@ def pca_umap2d_embedding_stdscaled(pca_all_dataset):
     return pd.DataFrame(embedding)
 
 @transform_pandas(
-    Output(rid="ri.vector.main.execute.e42843e7-6483-493f-93f0-91f65953d929"),
+    Output(rid="ri.foundry.main.dataset.6b6da43c-b691-45d8-a81a-b95def6bba59"),
     outcomes=Input(rid="ri.foundry.main.dataset.3d9b1654-3923-484f-8db5-6b38b56e290c"),
-    pca_umap2d_embedding=Input(rid="ri.foundry.main.dataset.d2ff4c8e-fbe2-445d-9df2-356a3a70e4f6")
+    pca_umap2d_embedding_stdscaled=Input(rid="ri.foundry.main.dataset.d0d29902-d951-4b39-aacd-117a2c981f1e")
 )
-def pca_umap2d_scaled_viz_site( outcomes, pca_umap2d_embedding):
+def pca_umap2d_scaled_viz_site( outcomes, pca_umap2d_embedding_stdscaled):
     embedding = pca_umap2d_embedding.values
     dfo = outcomes
     dfo['data_partner_id'] = dfo.data_partner_id.astype('category')
