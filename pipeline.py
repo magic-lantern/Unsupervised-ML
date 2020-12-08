@@ -578,3 +578,10 @@ def umap3d_viz_site(umap3d_embedding, outcomes):
     
     return
 
+@transform_pandas(
+    Output(rid="ri.vector.main.execute.e42843e7-6483-493f-93f0-91f65953d929"),
+    pca_umap2d_embedding_stdscaled=Input(rid="ri.foundry.main.dataset.d0d29902-d951-4b39-aacd-117a2c981f1e")
+)
+def unnamed(pca_umap2d_embedding_stdscaled):
+    
+
