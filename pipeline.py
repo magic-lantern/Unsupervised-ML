@@ -477,20 +477,20 @@ def pca_umap2d_viz_severity( outcomes, pca_umap2d_embedding):
     pca_umap2d_embedding=Input(rid="ri.foundry.main.dataset.d2ff4c8e-fbe2-445d-9df2-356a3a70e4f6")
 )
 def pca_umap2d_viz_site( outcomes, pca_umap2d_embedding):
-embedding = pca_umap2d_embedding.values
-dfo = outcomes
-dfo['data_partner_id'] = dfo.data_partner_id.astype('category')
+    embedding = pca_umap2d_embedding.values
+    dfo = outcomes
+    dfo['data_partner_id'] = dfo.data_partner_id.astype('category')
 
-#fig = plt.figure(figsize = (12, 8))
-#ax = plt.axes()
-splt = sns.scatterplot(x = embedding[:, 0],
-                        y = embedding[:, 1],
-                        hue = dfo.data_partner_id,
-                        alpha = 0.6,
-                        legend = True)
-plt.legend(bbox_to_anchor=(1, 1), loc="upper left")
-plt.title('PCA UMAP 2D scatter plot')
-plt.show()
+    #fig = plt.figure(figsize = (12, 8))
+    #ax = plt.axes()
+    splt = sns.scatterplot(x = embedding[:, 0],
+                            y = embedding[:, 1],
+                            hue = dfo.data_partner_id,
+                            alpha = 0.6,
+                            legend = True)
+    plt.legend(bbox_to_anchor=(1, 1), loc="upper left")
+    plt.title('PCA UMAP 2D scatter plot')
+    plt.show()
     
     return
 
