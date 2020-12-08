@@ -462,7 +462,9 @@ def pca_umap2d_scaled_viz_site( outcomes, pca_umap2d_embedding_stdscaled):
     splt = sns.scatterplot(x = embedding[:, 0],
                             y = embedding[:, 1],
                             hue = dfo.data_partner_id,
-                            alpha = 0.6)
+                            alpha = 0.6,
+                            legend = True)
+    plt.legend(bbox_to_anchor=(1, 1), loc="upper left")                            
     plt.title('PCA UMAP 2D scatter plot')
     plt.show()
     
