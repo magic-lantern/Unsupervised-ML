@@ -429,6 +429,27 @@ def pca_umap2d_scaled_viz_bad_outcome( outcomes, pca_umap2d_embedding_stdscaled)
 
 
 @transform_pandas(
+    Output(rid="ri.foundry.main.dataset.0636cf0d-202c-4919-bc65-06577254b95e"),
+    outcomes=Input(rid="ri.foundry.main.dataset.3d9b1654-3923-484f-8db5-6b38b56e290c"),
+    pca_umap2d_embedding_stdscaled=Input(rid="ri.foundry.main.dataset.d0d29902-d951-4b39-aacd-117a2c981f1e")
+)
+def pca_umap2d_scaled_viz_severity( outcomes, pca_umap2d_embedding_stdscaled):
+    embedding = pca_umap2d_embedding_stdscaled.values
+    dfo = outcomes
+    dfo['severity_type'] = dfo.severity_type.astype('category')
+
+    splt = sns.scatterplot(x = embedding[:, 0],
+                            y = embedding[:, 1],
+                            hue = dfo.severity_type,
+                            alpha = 0.6)
+    plt.title('PCA UMAP 2D scatter plot')
+    plt.show()
+    
+    return
+
+
+
+@transform_pandas(
     Output(rid="ri.foundry.main.dataset.6b6da43c-b691-45d8-a81a-b95def6bba59"),
     outcomes=Input(rid="ri.foundry.main.dataset.3d9b1654-3923-484f-8db5-6b38b56e290c"),
     pca_umap2d_embedding_stdscaled=Input(rid="ri.foundry.main.dataset.d0d29902-d951-4b39-aacd-117a2c981f1e")
@@ -664,25 +685,4 @@ def umap3d_viz_site(umap3d_embedding, outcomes):
     fig.show()
     
     return
-
-@transform_pandas(
-    Output(rid="ri.vector.main.execute.e4bbdfdf-800f-4200-b19f-99252a2f4ee0"),
-    outcomes=Input(rid="ri.foundry.main.dataset.3d9b1654-3923-484f-8db5-6b38b56e290c"),
-    pca_umap2d_embedding_stdscaled=Input(rid="ri.foundry.main.dataset.d0d29902-d951-4b39-aacd-117a2c981f1e")
-)
-def pca_umap2d_scaled_viz_site_1( outcomes, pca_umap2d_embedding_stdscaled):
-    embedding = pca_umap2d_embedding_stdscaled.values
-    dfo = outcomes
-    dfo['data_partner_id'] = dfo.data_partner_id.astype('category')
-
-    splt = sns.scatterplot(x = embedding[:, 0],
-                            y = embedding[:, 1],
-                            hue = dfo.data_partner_id,
-                            alpha = 0.6)
-    plt.title('PCA UMAP 2D scatter plot')
-    plt.show()
-    
-    return
-
-
 
