@@ -414,7 +414,7 @@ def pca_umap2d_embedding_stdscaled(pca_all_dataset):
     pca_umap2d_embedding_stdscaled=Input(rid="ri.foundry.main.dataset.d0d29902-d951-4b39-aacd-117a2c981f1e")
 )
 def pca_umap2d_scaled_viz_site( outcomes, pca_umap2d_embedding_stdscaled):
-    embedding = pca_umap2d_embedding.values
+    embedding = pca_umap2d_embedding_stdscaled.values
     dfo = outcomes
     dfo['data_partner_id'] = dfo.data_partner_id.astype('category')
 
