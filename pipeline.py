@@ -599,3 +599,24 @@ def umap3d_viz_site(umap3d_embedding, outcomes):
     
     return
 
+@transform_pandas(
+    Output(rid="ri.vector.main.execute.482363e2-a19c-4da2-a2d5-a5a1799999a8"),
+    outcomes=Input(rid="ri.foundry.main.dataset.3d9b1654-3923-484f-8db5-6b38b56e290c"),
+    pca_umap2d_embedding=Input(rid="ri.foundry.main.dataset.d2ff4c8e-fbe2-445d-9df2-356a3a70e4f6")
+)
+def pca_umap2d_viz_site_1( outcomes, pca_umap2d_embedding):
+    embedding = pca_umap2d_embedding.values
+    dfo = outcomes
+    dfo['data_partner_id'] = dfo.data_partner_id.astype('category')
+
+    splt = sns.scatterplot(x = embedding[:, 0],
+                            y = embedding[:, 1],
+                            hue = dfo.bad_outcome,
+                            alpha = 0.6)
+    plt.title('PCA UMAP 2D scatter plot')
+    plt.show()
+    
+    return
+
+
+
