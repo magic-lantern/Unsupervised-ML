@@ -386,7 +386,7 @@ def pca_explained_variance( inpatient_scaled_w_imputation):
 def pca_umap2d_embedding( pca_all_dataset):
     scaled_arr = pca_all_dataset.iloc[:, :20]
 
-    reducer = umap.UMAP(random_state=42, n_neighbors=200, local_connectivity=10)
+    reducer = umap.UMAP(random_state=42, n_neighbors=400, local_connectivity=20)
     reducer.fit(scaled_arr)
     embedding = reducer.transform(scaled_arr)
     return pd.DataFrame(embedding)
