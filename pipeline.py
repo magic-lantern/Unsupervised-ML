@@ -393,6 +393,22 @@ def pca_umap2d_embedding( pca_all_dataset):
 
 
 @transform_pandas(
+    Output(rid="ri.foundry.main.dataset.d0d29902-d951-4b39-aacd-117a2c981f1e"),
+    pca_all_dataset=Input(rid="ri.foundry.main.dataset.78eb8376-28de-4705-b6b1-d5d2cf520b45")
+)
+def pca_umap2d_embedding_stdscaled(pca_all_dataset):
+    arr = pca_all_dataset.iloc[:, :20]
+
+    scaler = StandardScaler()
+    scaler.fit(arr)
+    scaled_arr = scaler.transform(arr)
+
+    reducer = umap.UMAP(random_state=42, n_neighbors=200, local_connectivity=5)
+    reducer.fit(scaled_arr)
+    embedding = reducer.transform(scaled_arr)
+    return pd.DataFrame(embedding)
+
+@transform_pandas(
     Output(rid="ri.foundry.main.dataset.0b242849-8c9f-495c-955d-053da3a22e43"),
     outcomes=Input(rid="ri.foundry.main.dataset.3d9b1654-3923-484f-8db5-6b38b56e290c"),
     pca_umap2d_embedding=Input(rid="ri.foundry.main.dataset.d2ff4c8e-fbe2-445d-9df2-356a3a70e4f6")
@@ -561,11 +577,4 @@ def umap3d_viz_site(umap3d_embedding, outcomes):
     fig.show()
     
     return
-
-@transform_pandas(
-    Output(rid="ri.vector.main.execute.e97f8fb0-664f-484f-820b-f4ec1a9f1544"),
-    pca_all_dataset=Input(rid="ri.foundry.main.dataset.78eb8376-28de-4705-b6b1-d5d2cf520b45")
-)
-def unnamed(pca_all_dataset):
-    
 
