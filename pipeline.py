@@ -212,6 +212,8 @@ def outcomes(inpatient_ml_dataset):
                    'in_death_table',
                    'severity_type',
                    'length_of_stay',
+                   'visit_start_date',
+                   'visit_end_date',
                    'ecmo',
                    'aki_in_hospital',
                    'invasive_ventilation',
