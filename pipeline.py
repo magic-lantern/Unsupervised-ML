@@ -64,10 +64,11 @@ def inpatient_encoded(inpatient_ml_dataset):
     
     df = sdf.toPandas()
 
+    # actually decided that these columns are 'cheating'
     # fixing columns so they work with sklearn
-    df['visit_start'] = pd.to_datetime(df.visit_start_date).astype('int64')
-    df['visit_end'] = pd.to_datetime(df.visit_end_date).astype('int64')
-    df = df.drop(columns=['visit_start_date', 'visit_end_date'])
+    # df['visit_start'] = pd.to_datetime(df.visit_start_date).astype('int64')
+    # df['visit_end'] = pd.to_datetime(df.visit_end_date).astype('int64')
+    # df = df.drop(columns=['visit_start_date', 'visit_end_date'])
     
     # remove site so analysis is more generalized across all COVID positive
     # df = pd.concat([df, pd.get_dummies(df.data_partner_id, prefix='site', drop_first=True)], axis=1)
