@@ -148,7 +148,7 @@ def inpatient_encoded_w_imputation(inpatient_encoded):
     df['payer_no_matching_concept'] = df['payer_no_matching_concept'].fillna(False)
 
     # now fill the rest with the median
-    #df = df.fillna(df.median())
+    df = df.fillna(df.median())
 
     return df
 
