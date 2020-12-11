@@ -10,9 +10,11 @@ group by s_year, s_month
 order by s_year, s_month
 
 @transform_pandas(
-    Output(rid="ri.vector.main.execute.4a7a5e9b-7151-414d-8126-5785bb1ec7f1"),
+    Output(rid="ri.foundry.main.dataset.87ae0fb9-7045-4180-a60a-2869682b6f8a"),
     inpatient_ml_dataset=Input(rid="ri.foundry.main.dataset.07927bca-b175-4775-9c55-a371af481cc1")
 )
-SELECT *
-FROM inpatient_ml_dataset
+select count(1), year(visit_end_date) as s_year, month(visit_end_date) as s_month
+from inpatient_ml_dataset
+group by s_year, s_month
+order by s_year, s_month
 
