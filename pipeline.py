@@ -79,6 +79,10 @@ def inpatient_encoded(inpatient_ml_dataset):
     df = pd.concat([df.drop('blood_type', axis=1), pd.get_dummies(df.blood_type, prefix='blood_type', drop_first=True)], axis=1)
     #df = pd.concat([df.drop('severity_type', axis=1), pd.get_dummies(df.severity_type, prefix='severity', drop_first=True)], axis=1)
 
+    # these boolean coluumns aren't being treated as boolean
+    charlson_cols = ['chf', 'cancer', 'dm', 'dmcx', 'dementia', 'hiv', 'livermild', 'liversevere', 'mi', 'mets', 'pud', 'pvd', 'paralysis', 'pulmonary', 'renal', 'rheumatic', 'stroke']
+    df[charlson_cols] = df[charlson_cols].astype('bool')
+
     df.columns = df.columns.str.replace(' ', '_')
     df.columns = df.columns.str.replace('/', '_')
     df.columns = df.columns.str.lower()
