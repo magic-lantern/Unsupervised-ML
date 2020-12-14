@@ -206,6 +206,21 @@ def missing_data_info_all_cols(inpatient_encoded_all_cols):
     return missing_df
 
 @transform_pandas(
+    Output(rid="ri.foundry.main.dataset.01e0d7c9-f8a7-43ad-826c-83721a9f662e"),
+    inpatient_ml_dataset=Input(rid="ri.foundry.main.dataset.07927bca-b175-4775-9c55-a371af481cc1")
+)
+def missing_orig(inpatient_ml_dataset):
+    df = inpatient_ml_dataset.toPandas()
+    missing_df = df.isnull().sum().to_frame()
+    missing_df = missing_df.rename(columns = {0:'null_count'})
+    missing_df['pct_missing'] = missing_df['null_count'] / df.shape[0]
+    missing_df['pct_present'] = round((1 - missing_df['null_count'] / df.shape[0]) * 100, 1)
+    missing_df = missing_df.reset_index()
+    missing_df = missing_df.rename(columns = {'index':'variable'})
+    missing_df = missing_df.sort_values('pct_missing', ascending=False)
+    return missing_df
+
+@transform_pandas(
     Output(rid="ri.foundry.main.dataset.3d9b1654-3923-484f-8db5-6b38b56e290c"),
     inpatient_ml_dataset=Input(rid="ri.foundry.main.dataset.07927bca-b175-4775-9c55-a371af481cc1")
 )
@@ -697,11 +712,4 @@ def umap3d_viz_site(umap3d_embedding, outcomes):
     fig.show()
     
     return
-
-@transform_pandas(
-    Output(rid="ri.vector.main.execute.c2bb6f13-3a85-42a0-97d0-ebd450e09937"),
-    inpatient_ml_dataset=Input(rid="ri.foundry.main.dataset.07927bca-b175-4775-9c55-a371af481cc1")
-)
-def unnamed(inpatient_ml_dataset):
-    
 
