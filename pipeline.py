@@ -698,3 +698,10 @@ def umap3d_viz_site(umap3d_embedding, outcomes):
     
     return
 
+@transform_pandas(
+    Output(rid="ri.vector.main.execute.c2bb6f13-3a85-42a0-97d0-ebd450e09937"),
+    inpatient_ml_dataset=Input(rid="ri.foundry.main.dataset.07927bca-b175-4775-9c55-a371af481cc1")
+)
+def unnamed(inpatient_ml_dataset):
+    
+
