@@ -222,6 +222,7 @@ def outcomes(inpatient_ml_dataset):
                    'ecmo',
                    'aki_in_hospital',
                    'invasive_ventilation',
+                   'testcount'
                    'bad_outcome')
     return df.toPandas()
 
