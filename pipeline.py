@@ -55,6 +55,7 @@ def inpatient_encoded(inpatient_ml_dataset):
     sdf = sdf.drop('ecmo')
     sdf = sdf.drop('aki_in_hospital')
     sdf = sdf.drop('invasive_ventilation')
+    sdf = sdf.drop('testcount')
     sdf = sdf.drop('bad_outcome')
     # before this have filtered to patients affected by COVID
     sdf = sdf.drop('positive_covid_test', 'negative_covid_test', 'suspected_covid')
