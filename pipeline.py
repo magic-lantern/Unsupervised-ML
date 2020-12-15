@@ -140,7 +140,7 @@ def inpatient_encoded_w_imputation(inpatient_encoded):
     df['bnp_pg_ml'] = df['bnp_pg_ml'].fillna(100)
     df['c-reactive_protein_crp_mg_l'] = df['c-reactive_protein_crp_mg_l'].fillna(10)
     df['erythrocyte_sed_rate_mm_hr'] = df['erythrocyte_sed_rate_mm_hr'].fillna(19)
-    df['lactate_mg_dl'] = df['lactate_mg_dl'].fillna(13.5)
+    df['lactate_mm'] = df['lactate_mm'].fillna(13.5)
     df['nt_pro_bnp_pg_ml'] = df['nt_pro_bnp_pg_ml'].fillna(125)
     df['procalcitonin_ng_ml'] = df['procalcitonin_ng_ml'].fillna(0.02)
     df['troponin_all_types_ng_ml'] = df['troponin_all_types_ng_ml'].fillna(0.02)
