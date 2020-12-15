@@ -61,8 +61,8 @@ def inpatient_encoded(inpatient_ml_dataset):
     # before this have filtered to patients affected by COVID
     sdf = sdf.drop('positive_covid_test', 'negative_covid_test', 'suspected_covid')
 
-    # these columns are 90% or greater NULL
-    sdf = sdf.drop('miscellaneous_program', 'department_of_corrections', 'department_of_defense', 'other_government_federal_state_local_excluding_department_of_corrections', 'no_payment_from_an_organization_agency_program_private_payer_listed', 'medicaid', 'private_health_insurance')
+    # these columns are 85% or greater NULL (insurance information)
+    sdf = sdf.drop('miscellaneous_program', 'department_of_corrections', 'department_of_defense', 'other_government_federal_state_local_excluding_department_of_corrections', 'no_payment_from_an_organization_agency_program_private_payer_listed', 'medicaid', 'private_health_insurance', 'medicare', 'payer_no_matching_concept')
     
     df = sdf.toPandas()
 
