@@ -146,7 +146,7 @@ def inpatient_encoded_w_imputation(inpatient_encoded):
     df['troponin_all_types_ng_ml'] = df['troponin_all_types_ng_ml'].fillna(0.02)
 
     df.loc[(df.gender_male == True) & (df.ferritin_ng_ml.isna()), 'ferritin_ng_ml'] = 150
-    df.loc[(df.gender_male == False) & (df.other == False) & (df.ferritin_ng_ml.isna()), 'ferritin_ng_ml'] = 75
+    df.loc[(df.gender_male == False) & (df.gender_other == False) & (df.ferritin_ng_ml.isna()), 'ferritin_ng_ml'] = 75
     
     # fill these with False
     df['medicare'] = df['medicare'].fillna(False)
