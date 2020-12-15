@@ -146,7 +146,7 @@ def inpatient_encoded_w_imputation(inpatient_encoded):
     df['troponin_all_types_ng_ml'] = df['troponin_all_types_ng_ml'].fillna(0.02)
 
     df.loc[(df.gender_male == True) & (df.ferritin_ng_ml.isna()), 'ferritin_ng_ml'] = 150
-    df.loc[(df.gender_male == False) & (df.gender_no_matching_concept == False) & (df.ferritin_ng_ml.isna()), 'ferritin_ng_ml'] = 75
+    df.loc[(df.gender_male == False) & (df.other == False) & (df.ferritin_ng_ml.isna()), 'ferritin_ng_ml'] = 75
     
     # fill these with False
     df['medicare'] = df['medicare'].fillna(False)
@@ -210,6 +210,7 @@ def missing_data_info_all_cols(inpatient_encoded_all_cols):
     inpatient_ml_dataset=Input(rid="ri.foundry.main.dataset.07927bca-b175-4775-9c55-a371af481cc1")
 )
 def missing_orig(inpatient_ml_dataset):
+    inpatient_ml_dataset = inpatient_ml_dataset
     df = inpatient_ml_dataset.toPandas()
     missing_df = df.isnull().sum().to_frame()
     missing_df = missing_df.rename(columns = {0:'null_count'})
