@@ -149,9 +149,9 @@ def inpatient_encoded_w_imputation(inpatient_encoded):
     df.loc[(df.gender_male == True) & (df.ferritin_ng_ml.isna()), 'ferritin_ng_ml'] = 150
     df.loc[(df.gender_male == False) & (df.gender_other == False) & (df.ferritin_ng_ml.isna()), 'ferritin_ng_ml'] = 75
     
-    # fill these with False
-    df['medicare'] = df['medicare'].fillna(False)
-    df['payer_no_matching_concept'] = df['payer_no_matching_concept'].fillna(False)
+    # fill these with False - now dropped due to already dropping other insurance info
+    # df['medicare'] = df['medicare'].fillna(False)
+    # df['payer_no_matching_concept'] = df['payer_no_matching_concept'].fillna(False)
 
     # now fill the rest with the median
     df = df.fillna(df.median())
