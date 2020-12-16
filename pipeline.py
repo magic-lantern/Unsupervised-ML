@@ -161,21 +161,6 @@ def inpatient_scaled_w_imputation( inpatient_encoded_w_imputation):
     
 
 @transform_pandas(
-    Output(rid="ri.foundry.main.dataset.05f810fb-9481-4a6c-9ef1-ea81d5d93476"),
-    inpatient_encoded=Input(rid="ri.foundry.main.dataset.cef3c32e-767c-4f6a-b669-3920dac46a10")
-)
-def missing_data_info(inpatient_encoded):
-    df = inpatient_encoded
-    missing_df = df.isnull().sum().to_frame()
-    missing_df = missing_df.rename(columns = {0:'null_count'})
-    missing_df['pct_missing'] = missing_df['null_count'] / df.shape[0]
-    missing_df['pct_present'] = round((1 - missing_df['null_count'] / df.shape[0]) * 100, 1)
-    missing_df = missing_df.reset_index()
-    missing_df = missing_df.rename(columns = {'index':'variable'})
-    missing_df = missing_df.sort_values('pct_missing', ascending=False)
-    return missing_df
-
-@transform_pandas(
     Output(rid="ri.foundry.main.dataset.71dc050c-5c6a-442b-8b87-31b45277459a"),
     inpatient_encoded_all_cols=Input(rid="ri.foundry.main.dataset.5d31d8ed-ed3e-4304-96f7-9cc2554ed092")
 )
