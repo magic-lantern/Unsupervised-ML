@@ -122,14 +122,6 @@ def inpatient_encoded_all_cols(inpatient_ml_dataset):
     
 
 @transform_pandas(
-    Output(rid="ri.foundry.main.dataset.74e48f2e-6947-443e-ac1f-369a5575851e"),
-    inpatient_encoded=Input(rid="ri.foundry.main.dataset.cef3c32e-767c-4f6a-b669-3920dac46a10")
-)
-def inpatient_encoded_spark(inpatient_encoded):
-    inpatient_encoded = inpatient_encoded
-    return spark.createDataFrame(inpatient_encoded)
-
-@transform_pandas(
     Output(rid="ri.foundry.main.dataset.d3578a81-014a-49a6-9887-53d296155bdd"),
     inpatient_encoded=Input(rid="ri.foundry.main.dataset.cef3c32e-767c-4f6a-b669-3920dac46a10")
 )
