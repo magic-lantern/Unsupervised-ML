@@ -615,11 +615,3 @@ def umap3d_viz_site(umap3d_embedding, outcomes):
     
     return
 
-@transform_pandas(
-    Output(rid="ri.vector.main.execute.cd845376-04f6-4100-b42b-b7bd6a6c4b0d")
-)
-from pyspark.sql.types import *
-def unnamed():
-    schema = StructType([])
-    return spark.createDataFrame([[]], schema=schema)
-
