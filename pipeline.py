@@ -20,15 +20,6 @@ import plotly.express as px
 #np.set_printoptions(threshold=np.inf)
 
 @transform_pandas(
-    Output(rid="ri.foundry.main.dataset.b22e8aaf-db58-4baf-be4d-0eb1d7ea4080"),
-    inpatient_encoded=Input(rid="ri.foundry.main.dataset.cef3c32e-767c-4f6a-b669-3920dac46a10")
-)
-def data_by_site( inpatient_encoded):
-    df = inpatient_encoded
-    sites_with_values = df.groupby('data_partner_id').count()
-    return sites_with_values.reset_index()
-
-@transform_pandas(
     Output(rid="ri.foundry.main.dataset.64abd514-65b6-42f8-8075-0e63f23fcd0d"),
     inpatient_encoded_all_cols=Input(rid="ri.foundry.main.dataset.5d31d8ed-ed3e-4304-96f7-9cc2554ed092")
 )
