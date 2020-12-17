@@ -345,7 +345,7 @@ def pca_umap2d_viz_site( outcomes, pca_umap2d_embedding):
     inpatient_scaled_w_imputation=Input(rid="ri.foundry.main.dataset.bc823c17-fcdc-4801-a389-c6f476ed6971")
 )
 def umap2d_embedding(inpatient_scaled_w_imputation):
-    df = inpatient_scaled_w_imputation
+    df = inpatient_scaled_w_imputation.toPandas()
     df = df.drop(columns='visit_occurrence_id')
     scaled_arr = df.values
 
