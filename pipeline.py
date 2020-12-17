@@ -322,7 +322,7 @@ def pca_umap2d_viz_severity( outcomes, pca_umap2d_embedding):
 )
 def pca_umap2d_viz_site( outcomes, pca_umap2d_embedding):
     embedding = pca_umap2d_embedding.values
-    dfo = outcomes
+    dfo = outcomes.toPandas()
     dfo['data_partner_id'] = dfo.data_partner_id.astype('category')
 
     #fig = plt.figure(figsize = (12, 8))
