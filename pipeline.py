@@ -402,7 +402,7 @@ def umap2d_viz_severity_type( outcomes, umap2d_embedding):
 )
 def umap2d_viz_site( outcomes, umap2d_embedding):
     embedding = umap2d_embedding.values
-    dfo = outcomes
+    dfo = outcomes.toPandas()
     dfo['data_partner_id'] = dfo.data_partner_id.astype('category')
 
     splt = sns.scatterplot(x = embedding[:, 0],
