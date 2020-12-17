@@ -216,7 +216,7 @@ def pca_umap2d_embedding_stdscaled(pca_all_dataset):
 )
 def pca_umap2d_scaled_viz_bad_outcome( outcomes, pca_umap2d_embedding_stdscaled):
     embedding = pca_umap2d_embedding_stdscaled.values
-    dfo = outcomes
+    dfo = outcomes.toPandas()
 
     splt = sns.scatterplot(x = embedding[:, 0],
                             y = embedding[:, 1],
