@@ -456,7 +456,7 @@ def umap3d_viz_bad_outcome(umap3d_embedding, outcomes):
 )
 def umap3d_viz_severity_type(umap3d_embedding, outcomes):
     embedding = umap3d_embedding.values
-    dfo = outcomes
+    dfo = outcomes.toPandas()
     dfo['data_partner_id'] = dfo.data_partner_id.astype('category')
 
     fig = px.scatter_3d(x=embedding[:, 0],
