@@ -20,36 +20,7 @@ import plotly.express as px
 #np.set_printoptions(threshold=np.inf)
 
 @transform_pandas(
-    Output(rid="ri.foundry.main.dataset.d3578a81-014a-49a6-9887-53d296155bdd")
-)
-def inpatient_encoded_w_imputation(inpatient_encoded):
-    df = inpatient_encoded
-    # remove data_partner_id as it was kept for viewing missing data by site. Not part of the rest of this analysis pipeline
-    df = df.drop(columns='data_partner_id')
-
-    df['bnp_pg_ml'] = df['bnp_pg_ml'].fillna(100)
-    df['c-reactive_protein_crp_mg_l'] = df['c-reactive_protein_crp_mg_l'].fillna(10)
-    df['erythrocyte_sed_rate_mm_hr'] = df['erythrocyte_sed_rate_mm_hr'].fillna(19)
-    df['lactate_mm'] = df['lactate_mm'].fillna(13.5)
-    df['nt_pro_bnp_pg_ml'] = df['nt_pro_bnp_pg_ml'].fillna(125)
-    df['procalcitonin_ng_ml'] = df['procalcitonin_ng_ml'].fillna(0.02)
-    df['troponin_all_types_ng_ml'] = df['troponin_all_types_ng_ml'].fillna(0.02)
-
-    df.loc[(df.gender_male == True) & (df.ferritin_ng_ml.isna()), 'ferritin_ng_ml'] = 150
-    df.loc[(df.gender_male == False) & (df.gender_other == False) & (df.ferritin_ng_ml.isna()), 'ferritin_ng_ml'] = 75
-    
-    # fill these with False - now dropped due to already dropping other insurance info
-    # df['medicare'] = df['medicare'].fillna(False)
-    # df['payer_no_matching_concept'] = df['payer_no_matching_concept'].fillna(False)
-
-    # now fill the rest with the median
-    df = df.fillna(df.median())
-
-    return df
-
-@transform_pandas(
-    Output(rid="ri.foundry.main.dataset.f410db35-59e0-4b82-8fa8-d6dc6a61c9f2"),
-    inpatient_encoded_w_imputation=Input(rid="ri.foundry.main.dataset.d3578a81-014a-49a6-9887-53d296155bdd")
+    Output(rid="ri.foundry.main.dataset.f410db35-59e0-4b82-8fa8-d6dc6a61c9f2")
 )
 def inpatient_scaled_w_imputation( inpatient_encoded_w_imputation):
     df = inpatient_encoded_w_imputation
