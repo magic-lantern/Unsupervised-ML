@@ -236,7 +236,7 @@ def pca_umap2d_scaled_viz_bad_outcome( outcomes, pca_umap2d_embedding_stdscaled)
 )
 def pca_umap2d_scaled_viz_severity( outcomes, pca_umap2d_embedding_stdscaled):
     embedding = pca_umap2d_embedding_stdscaled.values
-    dfo = outcomes
+    dfo = outcomes.toPandas()
     dfo['severity_type'] = dfo.severity_type.astype('category')
 
     splt = sns.scatterplot(x = embedding[:, 0],
@@ -280,7 +280,7 @@ def pca_umap2d_scaled_viz_site( outcomes, pca_umap2d_embedding_stdscaled):
 )
 def pca_umap2d_viz_bad_outcome( outcomes, pca_umap2d_embedding):
     embedding = pca_umap2d_embedding.values
-    dfo = outcomes
+    dfo = outcomes.toPandas()
     dfo['data_partner_id'] = dfo.data_partner_id.astype('category')
 
     splt = sns.scatterplot(x = embedding[:, 0],
@@ -301,7 +301,7 @@ def pca_umap2d_viz_bad_outcome( outcomes, pca_umap2d_embedding):
 )
 def pca_umap2d_viz_severity( outcomes, pca_umap2d_embedding):
     embedding = pca_umap2d_embedding.values
-    dfo = outcomes
+    dfo = outcomes.toPandas()
     dfo['severity_type'] = dfo.severity_type.astype('category')
 
     splt = sns.scatterplot(x = embedding[:, 0],
