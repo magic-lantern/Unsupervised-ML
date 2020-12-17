@@ -20,8 +20,7 @@ import plotly.express as px
 #np.set_printoptions(threshold=np.inf)
 
 @transform_pandas(
-    Output(rid="ri.foundry.main.dataset.cef3c32e-767c-4f6a-b669-3920dac46a10"),
-    inpatient_ml_dataset=Input(rid="ri.foundry.main.dataset.07927bca-b175-4775-9c55-a371af481cc1")
+    Output(rid="ri.foundry.main.dataset.cef3c32e-767c-4f6a-b669-3920dac46a10")
 )
 def inpatient_encoded(inpatient_ml_dataset):
     inpatient_ml_dataset = inpatient_ml_dataset
@@ -126,8 +125,7 @@ def inpatient_scaled_w_imputation( inpatient_encoded_w_imputation):
     
 
 @transform_pandas(
-    Output(rid="ri.foundry.main.dataset.3d9b1654-3923-484f-8db5-6b38b56e290c"),
-    inpatient_ml_dataset=Input(rid="ri.foundry.main.dataset.07927bca-b175-4775-9c55-a371af481cc1")
+    Output(rid="ri.foundry.main.dataset.3d9b1654-3923-484f-8db5-6b38b56e290c")
 )
 def outcomes(inpatient_ml_dataset):
     df = inpatient_ml_dataset
