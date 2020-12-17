@@ -362,7 +362,7 @@ def umap2d_embedding(inpatient_scaled_w_imputation):
 )
 def umap2d_viz_bad_outcome( outcomes, umap2d_embedding):
     embedding = umap2d_embedding.values
-    dfo = outcomes
+    dfo = outcomes.toPandas()
     dfo['data_partner_id'] = dfo.data_partner_id.astype('category')
 
     splt = sns.scatterplot(x = embedding[:, 0],
@@ -476,7 +476,7 @@ def umap3d_viz_severity_type(umap3d_embedding, outcomes):
 )
 def umap3d_viz_site(umap3d_embedding, outcomes):
     embedding = umap3d_embedding.values
-    dfo = outcomes
+    dfo = outcomes.toPandas()
     dfo['data_partner_id'] = dfo.data_partner_id.astype('category')
 
     fig = px.scatter_3d(x=embedding[:, 0],
