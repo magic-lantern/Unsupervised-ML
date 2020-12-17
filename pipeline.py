@@ -138,6 +138,7 @@ def outcomes(inpatient_ml_dataset):
                    'length_of_stay',
                    'visit_start_date',
                    'visit_end_date',
+                   'smoking_status',
                    'ecmo',
                    'aki_in_hospital',
                    'invasive_ventilation',
