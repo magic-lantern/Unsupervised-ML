@@ -20,24 +20,6 @@ import plotly.express as px
 #np.set_printoptions(threshold=np.inf)
 
 @transform_pandas(
-    Output(rid="ri.foundry.main.dataset.f410db35-59e0-4b82-8fa8-d6dc6a61c9f2")
-)
-def inpatient_scaled_w_imputation( inpatient_encoded_w_imputation):
-    df = inpatient_encoded_w_imputation
-    
-    # this column should not be centered/scaled
-    visit_occurrence_id = df['visit_occurrence_id']
-    df = df.drop(columns='visit_occurrence_id')
-
-    scaler = StandardScaler()
-    scaler.fit(df)
-
-    ret_df = pd.DataFrame(scaler.transform(df), columns=df.columns)
-    ret_df['visit_occurrence_id'] = visit_occurrence_id
-    return ret_df
-    
-
-@transform_pandas(
     Output(rid="ri.foundry.main.dataset.3d9b1654-3923-484f-8db5-6b38b56e290c")
 )
 def outcomes(inpatient_ml_dataset):
@@ -62,8 +44,7 @@ def outcomes(inpatient_ml_dataset):
     return df.toPandas()
 
 @transform_pandas(
-    Output(rid="ri.foundry.main.dataset.e6967b18-d64f-4539-9a9f-7ae3a5eef700"),
-    inpatient_scaled_w_imputation=Input(rid="ri.foundry.main.dataset.f410db35-59e0-4b82-8fa8-d6dc6a61c9f2")
+    Output(rid="ri.foundry.main.dataset.e6967b18-d64f-4539-9a9f-7ae3a5eef700")
 )
 def pca3_ranked_features( inpatient_scaled_w_imputation):
     dfo = inpatient_scaled_w_imputation
@@ -97,7 +78,6 @@ def pca3_ranked_features( inpatient_scaled_w_imputation):
 
 @transform_pandas(
     Output(rid="ri.foundry.main.dataset.e60a9fc6-c946-4707-a1a0-bea11453ad48"),
-    inpatient_scaled_w_imputation=Input(rid="ri.foundry.main.dataset.f410db35-59e0-4b82-8fa8-d6dc6a61c9f2"),
     outcomes=Input(rid="ri.foundry.main.dataset.3d9b1654-3923-484f-8db5-6b38b56e290c")
 )
 def pca_2_comp_analysis( inpatient_scaled_w_imputation, outcomes):
@@ -138,7 +118,6 @@ def pca_2_comp_analysis( inpatient_scaled_w_imputation, outcomes):
 
 @transform_pandas(
     Output(rid="ri.foundry.main.dataset.a230c6e9-ece6-46e0-89aa-c9414533899f"),
-    inpatient_scaled_w_imputation=Input(rid="ri.foundry.main.dataset.f410db35-59e0-4b82-8fa8-d6dc6a61c9f2"),
     outcomes=Input(rid="ri.foundry.main.dataset.3d9b1654-3923-484f-8db5-6b38b56e290c")
 )
 def pca_3_comp_analysis( inpatient_scaled_w_imputation, outcomes):
@@ -183,8 +162,7 @@ def pca_3_comp_analysis( inpatient_scaled_w_imputation, outcomes):
     return spark.createDataFrame(pd.DataFrame(pca_3.components_, columns=df.columns,index = ['PC-1','PC-2', 'PC-3']).reset_index())
 
 @transform_pandas(
-    Output(rid="ri.foundry.main.dataset.78eb8376-28de-4705-b6b1-d5d2cf520b45"),
-    inpatient_scaled_w_imputation=Input(rid="ri.foundry.main.dataset.f410db35-59e0-4b82-8fa8-d6dc6a61c9f2")
+    Output(rid="ri.foundry.main.dataset.78eb8376-28de-4705-b6b1-d5d2cf520b45")
 )
 def pca_all_dataset(inpatient_scaled_w_imputation):
     # decent PCA guide available here: https://towardsdatascience.com/principal-component-analysis-pca-with-scikit-learn-1e84a0c731b0
@@ -202,8 +180,7 @@ def pca_all_dataset(inpatient_scaled_w_imputation):
     return pd.DataFrame(pca_all_arr)
 
 @transform_pandas(
-    Output(rid="ri.foundry.main.dataset.ad26ec53-2c46-4d3c-9a78-c86c77accad7"),
-    inpatient_scaled_w_imputation=Input(rid="ri.foundry.main.dataset.f410db35-59e0-4b82-8fa8-d6dc6a61c9f2")
+    Output(rid="ri.foundry.main.dataset.ad26ec53-2c46-4d3c-9a78-c86c77accad7")
 )
 def pca_explained_variance( inpatient_scaled_w_imputation):
     df = inpatient_scaled_w_imputation
@@ -383,8 +360,7 @@ def pca_umap2d_viz_site( outcomes, pca_umap2d_embedding):
 
 
 @transform_pandas(
-    Output(rid="ri.foundry.main.dataset.ba772263-cc7a-41ab-82a2-0203139bbbf4"),
-    inpatient_scaled_w_imputation=Input(rid="ri.foundry.main.dataset.f410db35-59e0-4b82-8fa8-d6dc6a61c9f2")
+    Output(rid="ri.foundry.main.dataset.ba772263-cc7a-41ab-82a2-0203139bbbf4")
 )
 def umap2d_embedding(inpatient_scaled_w_imputation):
     df = inpatient_scaled_w_imputation
@@ -458,8 +434,7 @@ def umap2d_viz_site( outcomes, umap2d_embedding):
 
 
 @transform_pandas(
-    Output(rid="ri.foundry.main.dataset.c135a77f-4b71-4df9-abfe-be348abfc6a8"),
-    inpatient_scaled_w_imputation=Input(rid="ri.foundry.main.dataset.f410db35-59e0-4b82-8fa8-d6dc6a61c9f2")
+    Output(rid="ri.foundry.main.dataset.c135a77f-4b71-4df9-abfe-be348abfc6a8")
 )
 def umap3d_embedding(inpatient_scaled_w_imputation):
     df = inpatient_scaled_w_imputation
