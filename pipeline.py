@@ -24,7 +24,7 @@ import plotly.express as px
     inpatient_scaled_w_imputation=Input(rid="ri.foundry.main.dataset.bc823c17-fcdc-4801-a389-c6f476ed6971")
 )
 def pca3_ranked_features( inpatient_scaled_w_imputation):
-    dfo = inpatient_scaled_w_imputation
+    dfo = inpatient_scaled_w_imputation.toPandas()
     # take out visit_occurrence_id column
     df = dfo.drop(columns='visit_occurrence_id')
     scaled_arr = df.values
